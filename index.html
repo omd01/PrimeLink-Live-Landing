@@ -77,11 +77,12 @@
     </style>
 </head>
 
-<body class="bg-white text-neutral-900 font-sans antialiased selection:bg-brand-teal selection:text-white">
+<body
+    class="bg-white text-neutral-900 font-sans antialiased selection:bg-brand-teal selection:text-white overflow-x-hidden">
 
     <!-- Navigation -->
     <nav class="fixed top-0 w-full z-50 border-b border-neutral-200 bg-white/80 backdrop-blur-md">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between relative z-[70]">
             <div class="flex items-center gap-3">
                 <!-- Logo P -->
                 <div class="w-8 h-8 rounded-lg flex items-center justify-center text-black font-bold text-lg">
@@ -90,7 +91,8 @@
                 <span class="font-semibold text-lg tracking-tight text-neutral-900">PrimeLink</span>
             </div>
 
-            <div class="hidden md:flex items-center gap-8 text-sm text-neutral-600 font-medium">
+            <!-- Desktop Menu (Visible on LG and up) -->
+            <div class="hidden lg:flex items-center gap-8 text-sm text-neutral-600 font-medium">
                 <a href="#" class="hover:text-brand-teal transition-colors">Physical Trade</a>
                 <a href="#" class="hover:text-brand-teal transition-colors">Logistics</a>
                 <a href="#" class="hover:text-brand-teal transition-colors">Digital Tools</a>
@@ -98,20 +100,24 @@
             </div>
 
             <a href="#"
-                class="hidden md:flex text-sm font-bold text-white bg-neutral-900 border border-neutral-900 px-5 py-2.5 rounded-full hover:bg-brand-teal hover:border-brand-teal hover:text-white transition-all duration-300 shadow-lg shadow-neutral-200">
+                class="hidden lg:flex text-sm font-bold text-white bg-neutral-900 border border-neutral-900 px-5 py-2.5 rounded-full hover:bg-brand-teal hover:border-brand-teal hover:text-white transition-all duration-300 shadow-lg shadow-neutral-200">
                 Access Platform
             </a>
 
-            <!-- Mobile Menu Button -->
-            <button id="mobile-menu-btn" class="md:hidden text-neutral-900 p-2 z-50 relative">
+            <!-- Mobile Menu Button (Visible on LG and below) -->
+            <button id="mobile-menu-btn" class="lg:hidden text-neutral-900 p-2 relative z-[70]">
                 <span class="iconify text-3xl" data-icon="solar:hamburger-menu-linear"></span>
             </button>
         </div>
+
         <!-- Mobile Menu Overlay -->
         <div id="mobile-menu-overlay"
-            class="fixed inset-0 bg-white z-[60] hidden flex-col opacity-0 transition-opacity duration-300">
-            <div class="flex justify-between items-center p-6 border-b border-neutral-200">
-                <div class="flex items-center gap-3">
+            class="fixed inset-0 w-screen h-screen bg-white/90 backdrop-blur-xl z-[60] hidden flex-col opacity-0 transition-all duration-300">
+
+            <!-- Header Placeholder for Alignment -->
+            <div
+                class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between w-full border-b border-neutral-200/50">
+                <div class="flex items-center gap-3 opacity-0"> <!-- Invisible logo to maintain spacing -->
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center text-black font-bold text-lg">
                         <img src="EXIM.svg" alt="Logo">
                     </div>
@@ -122,14 +128,20 @@
                 </button>
             </div>
 
-            <div class="flex flex-col items-center justify-center flex-1 gap-8 text-2xl font-light text-neutral-600">
-                <a href="#" class="hover:text-brand-teal transition-colors mobile-link">Physical Trade</a>
-                <a href="#" class="hover:text-brand-teal transition-colors mobile-link">Logistics</a>
-                <a href="#" class="hover:text-brand-teal transition-colors mobile-link">Digital Tools</a>
-                <a href="#" class="hover:text-brand-teal transition-colors mobile-link">About</a>
+            <div class="flex flex-col items-center justify-center h-full gap-10">
+                <a href="#"
+                    class="text-3xl font-light text-neutral-800 hover:text-brand-teal transition-colors mobile-link">Physical
+                    Trade</a>
+                <a href="#"
+                    class="text-3xl font-light text-neutral-800 hover:text-brand-teal transition-colors mobile-link">Logistics</a>
+                <a href="#"
+                    class="text-3xl font-light text-neutral-800 hover:text-brand-teal transition-colors mobile-link">Digital
+                    Tools</a>
+                <a href="#"
+                    class="text-3xl font-light text-neutral-800 hover:text-brand-teal transition-colors mobile-link">About</a>
 
                 <a href="#"
-                    class="mt-4 text-base font-bold text-white bg-neutral-900 border border-neutral-900 px-8 py-3 rounded-full hover:bg-brand-teal hover:border-brand-teal hover:text-white transition-all duration-300 shadow-lg shadow-neutral-200">
+                    class="mt-8 text-lg font-medium text-white bg-neutral-900 border border-neutral-900 px-10 py-4 rounded-full hover:bg-brand-teal hover:border-brand-teal hover:text-white transition-all duration-300 shadow-xl shadow-neutral-200">
                     Access Platform
                 </a>
             </div>
@@ -170,7 +182,7 @@
     </script>
 
     <!-- Main Content Wrapper -->
-    <main class="pt-32 pb-20 px-4 sm:px-6">
+    <main class="pt-36 lg:pt-40 pb-20 px-4 sm:px-6">
 
         <!-- Hero Section -->
         <section class="max-w-7xl mx-auto mb-32">
@@ -184,9 +196,9 @@
                 </div>
 
                 <h1
-                    class="text-5xl md:text-7xl lg:text-8xl font-medium tracking-tighter leading-[1.1] mb-8 text-neutral-900 max-w-6xl">
+                    class="text-5xl md:text-6xl lg:text-8xl font-medium tracking-tighter leading-[1.1] mb-8 text-neutral-900 max-w-6xl">
                     Move cargo globally. <br class="hidden md:block" />
-                    Manage it <span class="text-neutral-400">digitally.</span>
+                    Manage it <span class="text-brand-teal">digitally.</span>
                 </h1>
 
                 <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
