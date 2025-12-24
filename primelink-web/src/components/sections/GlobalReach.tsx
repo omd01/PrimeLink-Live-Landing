@@ -20,19 +20,20 @@ export default function GlobalReach() {
 
     useEffect(() => {
         // --- CONFIGURATION ---
-        const BRAND_TEAL = 0x0D9488;  // PrimeLink Teal
-        const BRAND_AMBER = 0xD97706; // PrimeLink Amber
+        // Light Mode Colors
+        const BRAND_TEAL = 0x0D9488; // Deep Teal for visibility on white
+        const BRAND_AMBER = 0xD97706; // Amber
         const GLOBE_RADIUS = 5;
 
         // --- SCENE SETUP ---
         const scene = new THREE.Scene();
-        // No background color set = transparent
+        // Transparent BG handled by renderer
 
-        const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000); // Aspect ratio fixed in resize
+        const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
 
         // Initial View: Focused roughly on India/Middle East
         const indiaPosition = latLonToVector3(20.5937, 78.9629, GLOBE_RADIUS);
-        camera.position.copy(indiaPosition.normalize().multiplyScalar(9.6));
+        camera.position.copy(indiaPosition.normalize().multiplyScalar(10.5));
 
         const renderer = new THREE.WebGLRenderer({
             alpha: true,
@@ -40,7 +41,6 @@ export default function GlobalReach() {
             powerPreference: "high-performance"
         });
         renderer.setPixelRatio(window.devicePixelRatio);
-        // We defer setting size until we have the container dimensions
 
         if (mountRef.current) {
             mountRef.current.appendChild(renderer.domElement);
@@ -50,28 +50,27 @@ export default function GlobalReach() {
         const controls = new OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
         controls.dampingFactor = 0.05;
-        controls.enableZoom = false; // Disable zoom to keep layout stable
+        controls.enableZoom = false;
         controls.enablePan = false;
         controls.autoRotate = true;
         controls.autoRotateSpeed = 0.8;
 
-        // --- LIGHTING (Crucial for Light Mode 3D) ---
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+        // --- LIGHTING ---
+        const ambientLight = new THREE.AmbientLight(0xffffff, 1.0); // Bright ambient
         scene.add(ambientLight);
-
         const dirLight = new THREE.DirectionalLight(0xffffff, 1.5);
         dirLight.position.set(10, 10, 5);
         scene.add(dirLight);
 
         // --- OBJECTS ---
 
-        // 1. The Base Sphere (The Ocean)
+        // 1. The Base Sphere (The Ocean - Transparent Glass)
         const globeGeometry = new THREE.SphereGeometry(GLOBE_RADIUS, 64, 64);
         const globeMaterial = new THREE.MeshPhongMaterial({
-            color: 0xffffff,
+            color: 0xffffff, // White
             transparent: true,
-            opacity: 0.05, // Very subtle glass look
-            shininess: 0,
+            opacity: 0.05,   // Very subtle
+            shininess: 90,   // High gloss
         });
         const globe = new THREE.Mesh(globeGeometry, globeMaterial);
         scene.add(globe);
@@ -87,103 +86,79 @@ export default function GlobalReach() {
                 data.features.forEach((feature: any) => {
                     const geometry = feature.geometry;
                     const coordinates = geometry.coordinates;
-
                     const processPolygon = (polygon: any[]) => {
                         polygon.forEach((point: any[]) => {
-                            // Density check to avoid too many points
                             if (Math.random() > 0.15) {
                                 const pos = latLonToVector3(point[1], point[0], GLOBE_RADIUS);
                                 points.push(pos.x, pos.y, pos.z);
                             }
                         });
                     };
-
                     if (geometry.type === "Polygon") {
                         processPolygon(coordinates[0]);
                     } else if (geometry.type === "MultiPolygon") {
                         coordinates.forEach((polygon: any[]) => processPolygon(polygon[0]));
                     }
                 });
-
                 const pointsGeometry = new THREE.BufferGeometry();
                 pointsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(points, 3));
-
                 const pointsMaterial = new THREE.PointsMaterial({
-                    color: BRAND_TEAL, // Teal points
-                    size: 0.06,
+                    color: BRAND_TEAL,
+                    size: 0.07,
                     transparent: true,
-                    opacity: 0.6,
+                    opacity: 0.7,
                     sizeAttenuation: true
                 });
-
                 const pointsMesh = new THREE.Points(pointsGeometry, pointsMaterial);
                 pointsGroup.add(pointsMesh);
             })
             .catch(err => console.error("Globe data error:", err));
 
-
         // 3. Data Arcs & Animations
         const animatedArrows: { mesh: THREE.Mesh; curve: THREE.Curve<THREE.Vector3>; progress: number; speed: number; reverse: boolean }[] = [];
 
-        // Helper: Create Curves
         function createAnimatedCurve(startCoords: { lat: number, lon: number }, endCoords: { lat: number, lon: number }, reverse: boolean) {
             const startVector = latLonToVector3(startCoords.lat, startCoords.lon, GLOBE_RADIUS);
             const endVector = latLonToVector3(endCoords.lat, endCoords.lon, GLOBE_RADIUS);
-
-            // Curve Math
             const midPoint = new THREE.Vector3().addVectors(startVector, endVector).multiplyScalar(0.5);
             const distance = startVector.distanceTo(endVector);
-            midPoint.normalize().multiplyScalar(GLOBE_RADIUS + distance * 0.4); // Arc height
+            midPoint.normalize().multiplyScalar(GLOBE_RADIUS + distance * 0.4);
 
             const curve = new THREE.QuadraticBezierCurve3(startVector, midPoint, endVector);
-
-            // Static Line (Faint Trace)
             const points = curve.getPoints(50);
             const lineGeo = new THREE.BufferGeometry().setFromPoints(points);
             const lineMat = new THREE.LineBasicMaterial({
                 color: BRAND_TEAL,
                 transparent: true,
-                opacity: 0.15
+                opacity: 0.2
             });
-            const lineObj = new THREE.Line(lineGeo, lineMat);
-            globe.add(lineObj);
+            globe.add(new THREE.Line(lineGeo, lineMat));
 
-            // Animated Arrow/Particle
-            const arrowGeo = new THREE.SphereGeometry(0.08, 8, 8); // Simple dot is cleaner than arrow
+            const arrowGeo = new THREE.SphereGeometry(0.1, 8, 8);
             const arrowMat = new THREE.MeshBasicMaterial({ color: BRAND_AMBER });
             const arrow = new THREE.Mesh(arrowGeo, arrowMat);
-
             const arrowObj = {
                 mesh: arrow,
                 curve: curve,
                 progress: Math.random(),
-                speed: 0.003 + Math.random() * 0.002, // Randomized speed
+                speed: 0.003 + Math.random() * 0.002,
                 reverse: reverse
             };
-
             globe.add(arrow);
             animatedArrows.push(arrowObj);
         }
 
-        // Define Routes (India Hub)
         const india = { lat: 20.59, lon: 78.96 };
         const routes = [
-            { lat: 51.50, lon: -0.12 }, // London
-            { lat: 25.20, lon: 55.27 }, // Dubai
-            { lat: 1.35, lon: 103.81 }, // Singapore
-            { lat: 40.71, lon: -74.00 }, // NYC
-            { lat: -33.86, lon: 151.20 }, // Sydney
-            { lat: 35.67, lon: 139.65 }, // Tokyo
-            { lat: 52.52, lon: 13.40 }, // Berlin
-            { lat: -1.29, lon: 36.82 }, // Nairobi
+            { lat: 51.50, lon: -0.12 }, { lat: 25.20, lon: 55.27 }, { lat: 1.35, lon: 103.81 },
+            { lat: 40.71, lon: -74.00 }, { lat: -33.86, lon: 151.20 }, { lat: 35.67, lon: 139.65 },
+            { lat: 52.52, lon: 13.40 }, { lat: -1.29, lon: 36.82 },
         ];
-
         routes.forEach(dest => {
-            createAnimatedCurve(india, dest, false); // Outbound
-            createAnimatedCurve(dest, india, true);  // Inbound
+            createAnimatedCurve(india, dest, false);
+            createAnimatedCurve(dest, india, true);
         });
 
-        // --- RESIZE HANDLER ---
         const handleResize = () => {
             if (!mountRef.current) return;
             const width = mountRef.current.clientWidth;
@@ -192,18 +167,13 @@ export default function GlobalReach() {
             camera.aspect = width / height;
             camera.updateProjectionMatrix();
         };
-
-        // Initial sizing
         handleResize();
         window.addEventListener('resize', handleResize);
 
-        // --- ANIMATION LOOP ---
         let animationFrameId: number;
         const animate = () => {
             animationFrameId = requestAnimationFrame(animate);
             controls.update();
-
-            // Animate Arrows
             animatedArrows.forEach(item => {
                 if (item.reverse) {
                     item.progress -= item.speed;
@@ -215,21 +185,16 @@ export default function GlobalReach() {
                 const point = item.curve.getPoint(item.progress);
                 item.mesh.position.copy(point);
             });
-
             renderer.render(scene, camera);
         };
         animate();
 
-        // --- CLEANUP ---
         return () => {
             cancelAnimationFrame(animationFrameId);
             window.removeEventListener('resize', handleResize);
-            if (mountRef.current && renderer.domElement) {
-                if (mountRef.current.contains(renderer.domElement)) {
-                    mountRef.current.removeChild(renderer.domElement);
-                }
+            if (mountRef.current?.contains(renderer.domElement)) {
+                mountRef.current.removeChild(renderer.domElement);
             }
-            // Dispose Three.js resources
             globeGeometry.dispose();
             globeMaterial.dispose();
             renderer.dispose();
@@ -241,10 +206,10 @@ export default function GlobalReach() {
         <section className="max-w-7xl mx-auto py-24 border-t border-neutral-200">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
-                {/* Left Side: Content (Preserved from your original code) */}
-                <div>
+                {/* Left Side: Content */}
+                <div className="order-2 lg:order-1">
                     <span className="text-brand-amber font-mono text-sm tracking-widest uppercase mb-4 block">Global Infrastructure</span>
-                    <h2 className="text-4xl md:text-5xl font-medium mb-6 leading-tight text-neutral-900">
+                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-medium mb-8 leading-tight text-neutral-900">
                         Built on bedrock.<br />
                         <span className="text-neutral-400">Not just code.</span>
                     </h2>
@@ -254,40 +219,64 @@ export default function GlobalReach() {
                         real people.
                     </p>
 
-                    <div className="space-y-4">
-                        <div className="flex items-center gap-4 p-4 rounded-xl bg-neutral-50 border border-neutral-200 hover:bg-white hover:shadow-md transition-all">
-                            <div className="w-10 h-10 rounded-full bg-brand-teal/10 flex items-center justify-center text-brand-teal">
-                                <Icon icon="solar:globe-linear" className="text-xl" />
-                            </div>
-                            <div>
-                                <h4 className="text-neutral-900 font-medium">Global Coverage</h4>
-                                <p className="text-sm text-neutral-500">Active export lanes across major trade regions.</p>
-                            </div>
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="p-6 rounded-2xl bg-neutral-50/50 border border-neutral-200 hover:border-brand-teal/30 hover:shadow-lg transition-all group">
+                            <div className="text-3xl font-bold text-neutral-900 mb-1 group-hover:text-brand-teal transition-colors">12+</div>
+                            <div className="text-sm text-neutral-500 font-medium">Global Hubs</div>
                         </div>
-                        <div className="flex items-center gap-4 p-4 rounded-xl bg-neutral-50 border border-neutral-200 hover:bg-white hover:shadow-md transition-all">
-                            <div className="w-10 h-10 rounded-full bg-brand-teal/10 flex items-center justify-center text-brand-teal">
-                                <Icon icon="solar:warehouse-linear" className="text-xl" />
-                            </div>
-                            <div>
-                                <h4 className="text-neutral-900 font-medium">Strategic Warehousing</h4>
-                                <p className="text-sm text-neutral-500">Consolidation points in key logistics hubs.</p>
-                            </div>
+                        <div className="p-6 rounded-2xl bg-neutral-50/50 border border-neutral-200 hover:border-brand-teal/30 hover:shadow-lg transition-all group">
+                            <div className="text-3xl font-bold text-neutral-900 mb-1 group-hover:text-brand-teal transition-colors">850+</div>
+                            <div className="text-sm text-neutral-500 font-medium">Verified Partners</div>
                         </div>
                     </div>
                 </div>
 
-                {/* Right Side: The 3D Canvas Container */}
-                <div
-                    ref={mountRef}
-                    className="relative w-full aspect-square md:aspect-[4/3] bg-neutral-50 rounded-3xl border border-neutral-200 overflow-hidden cursor-move"
-                >
-                    {/* Optional: Simple Overlay for "Live Tracking" UI */}
-                    <div className="absolute bottom-6 left-6 bg-white/80 backdrop-blur-md border border-neutral-200 px-4 py-2 rounded-lg shadow-sm z-10 pointer-events-none">
-                        <p className="text-xs text-brand-teal font-mono animate-pulse flex items-center gap-2">
-                            <span className="w-2 h-2 rounded-full bg-brand-teal"></span>
-                            LIVE TRACKING ACTIVE
-                        </p>
+                {/* Right Side: The 3D Canvas + HUD (Light Mode) */}
+                <div className="order-1 lg:order-2 relative w-full aspect-square md:aspect-[4/3] bg-white rounded-3xl overflow-hidden shadow-xl border border-neutral-100">
+
+                    {/* The Globe Canvas (Transparent) */}
+                    <div ref={mountRef} className="absolute inset-0 z-0 opacity-100" />
+
+                    {/* HUD Overlay: Grid Lines (Grey) */}
+                    <div className="absolute inset-0 pointer-events-none"
+                        style={{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px)', backgroundSize: '40px 40px' }}>
                     </div>
+
+                    {/* HUD Overlay: Status Badge (Light) */}
+                    <div className="absolute top-6 left-6 z-10">
+                        <div className="flex items-center gap-2 bg-white/80 backdrop-blur-md border border-neutral-200 px-3 py-1.5 rounded-full shadow-sm">
+                            <span className="relative flex h-2 w-2">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-teal opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-teal"></span>
+                            </span>
+                            <span className="text-xs font-mono text-brand-teal tracking-wider font-semibold">SYSTEM ONLINE</span>
+                        </div>
+                    </div>
+
+                    {/* HUD Overlay: Floating Metrics (Light) */}
+                    <div className="absolute top-6 right-6 z-10 flex flex-col gap-2">
+                        <div className="bg-white/80 backdrop-blur-md border border-neutral-200 px-4 py-3 rounded-xl text-right shadow-sm">
+                            <div className="text-[10px] text-neutral-400 uppercase tracking-widest mb-0.5">Active Vessels</div>
+                            <div className="text-lg font-bold text-neutral-900 font-mono">24</div>
+                        </div>
+                        <div className="bg-white/80 backdrop-blur-md border border-neutral-200 px-4 py-3 rounded-xl text-right shadow-sm">
+                            <div className="text-[10px] text-neutral-400 uppercase tracking-widest mb-0.5">Latency</div>
+                            <div className="text-lg font-bold text-brand-teal font-mono">12ms</div>
+                        </div>
+                    </div>
+
+                    {/* HUD Overlay: Bottom Bar (Dark text) */}
+                    <div className="absolute bottom-6 left-6 right-6 z-10 flex justify-between items-end text-neutral-400 font-mono text-xs">
+                        <div>
+                            <p>LAT: 20.5937 N</p>
+                            <p>LON: 78.9629 E</p>
+                        </div>
+                        <div className="text-right">
+                            <p>PRIMELINK OS v2.4</p>
+                            <p>SECURE CONNECTION</p>
+                        </div>
+                    </div>
+
                 </div>
 
             </div>

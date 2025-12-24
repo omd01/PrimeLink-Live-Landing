@@ -1,80 +1,127 @@
 "use client";
 
+import { useState } from 'react';
 import { Icon } from '@iconify/react';
 import Image from 'next/image';
 import Link from 'next/link';
 
 export default function Services() {
-    return (
-        <section className="max-w-7xl mx-auto py-24 border-t border-neutral-200">
+    const [activeCard, setActiveCard] = useState<'physical' | 'digital' | null>(null);
 
-            <div className="mb-16 max-w-3xl">
-                <h2 className="text-4xl md:text-5xl lg:text-6xl font-medium tracking-tight mb-6 text-neutral-900">
+    return (
+        <section className="max-w-7xl mx-auto py-24 mb-24 px-4 md:px-0">
+
+            <div className="mb-16 max-w-4xl mx-auto text-center">
+                <h2 className="text-4xl md:text-5xl lg:text-7xl font-medium tracking-tighter mb-6 text-neutral-900 leading-[1.1]">
                     We bridge the gap between <br />
                     <span className="text-neutral-400">Physical Chaos</span> and <span className="text-brand-teal">Digital Order.</span>
                 </h2>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
+            {/* Interactive Flex Container */}
+            <div
+                className="flex flex-col md:flex-row gap-4 md:gap-6 h-[800px] w-full"
+                onMouseLeave={() => setActiveCard(null)}
+            >
 
                 {/* Card 1: Physical Division */}
-                <div className="group relative rounded-3xl bg-white border border-neutral-200 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col h-full">
-                    {/* Image Section */}
-                    <div className="relative h-64 md:h-72 w-full overflow-hidden">
+                <div
+                    onMouseEnter={() => setActiveCard('physical')}
+                    className={`
+                        relative rounded-[2.5rem] overflow-hidden group hover:shadow-2xl transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]
+                        ${activeCard === 'physical' ? 'md:flex-[2]' : activeCard === 'digital' ? 'md:flex-[1]' : 'md:flex-[1.5]'}
+                        flex-1 flex flex-col justify-end
+                    `}
+                >
+                    {/* Background Image with Zoom Effect */}
+                    <div className="absolute inset-0 w-full h-full">
+                        <div className="absolute inset-0 bg-neutral-900/30 z-10 group-hover:bg-neutral-900/20 transition-colors duration-500"></div>
                         <Image
-                            src="/physical-trade.jpg"
-                            alt="Physical Trade Division"
+                            src="/bg1.png"
+                            alt="Physical Trade"
                             fill
-                            className="object-cover group-hover:scale-105 transition-transform duration-700"
+                            className="object-cover transition-transform duration-1000 group-hover:scale-110 grayscale group-hover:grayscale-0"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                     </div>
 
-                    {/* Content Section */}
-                    <div className="p-8 flex flex-col justify-between flex-1">
-                        <div>
-                            <div className="w-12 h-12 rounded-full bg-brand-amber/10 flex items-center justify-center mb-6 text-brand-amber">
-                                <Icon icon="solar:box-minimalistic-bold-duotone" className="text-2xl" />
-                            </div>
-                            <h3 className="text-2xl md:text-3xl font-medium mb-4 tracking-tight text-neutral-900">Physical Trade Division</h3>
-                            <p className="text-lg text-neutral-600 font-light leading-relaxed mb-8">
-                                End-to-end execution. We source verified products and handle the entire logistics chain from factory to port.
-                            </p>
+                    {/* Content Overlay */}
+                    <div className="relative z-20 p-8 md:p-12 text-white bg-gradient-to-t from-black/90 via-black/50 to-transparent h-full flex flex-col justify-end items-start border border-white/10 rounded-[2.5rem]">
+
+                        <div className="bg-white/10 backdrop-blur-md p-3 rounded-2xl mb-6 border border-white/20">
+                            <Icon icon="solar:box-minimalistic-bold-duotone" className="text-3xl text-brand-amber" />
                         </div>
-                        <Link href="/physical" className="inline-flex items-center gap-2 text-brand-amber font-semibold group-hover:gap-3 transition-all">
-                            Explore Physical Services
-                            <Icon icon="solar:arrow-right-linear" className="text-lg" />
+
+                        <h3 className="text-3xl md:text-5xl font-medium mb-4 tracking-tight leading-none">
+                            Physical <br /> Trade Division
+                        </h3>
+
+                        <p className={`
+                            text-lg text-neutral-200 font-light leading-relaxed mb-8 max-w-md transition-all duration-500 overflow-hidden
+                            ${activeCard === 'digital' ? 'h-0 opacity-0 mb-0' : 'h-auto opacity-100'}
+                        `}>
+                            End-to-end execution. We source verified products and handle the entire logistics chain from factory to port.
+                        </p>
+
+                        <Link href="/physical"
+                            className={`
+                                inline-flex items-center gap-3 text-white bg-white/20 backdrop-blur-sm border border-white/30 px-8 py-4 rounded-full 
+                                hover:bg-brand-amber hover:border-brand-amber transition-all duration-300
+                                ${activeCard === 'digital' ? 'scale-0 opacity-0' : 'scale-100 opacity-100'}
+                            `}
+                        >
+                            <span className="font-semibold">Explore Physical</span>
+                            <Icon icon="solar:arrow-right-linear" className="text-xl" />
                         </Link>
                     </div>
                 </div>
 
                 {/* Card 2: Digital Division */}
-                <div className="group relative rounded-3xl bg-white border border-neutral-200 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col h-full">
-                    {/* Image Section */}
-                    <div className="relative h-64 md:h-72 w-full overflow-hidden">
+                <div
+                    onMouseEnter={() => setActiveCard('digital')}
+                    className={`
+                        relative rounded-[2.5rem] overflow-hidden group hover:shadow-2xl transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]
+                        ${activeCard === 'digital' ? 'md:flex-[2]' : activeCard === 'physical' ? 'md:flex-[1]' : 'md:flex-[1.5]'}
+                        flex-1 flex flex-col justify-end
+                    `}
+                >
+                    {/* Background Image with Zoom Effect */}
+                    <div className="absolute inset-0 w-full h-full">
+                        <div className="absolute inset-0 bg-neutral-900/30 z-10 group-hover:bg-neutral-900/20 transition-colors duration-500"></div>
                         <Image
-                            src="/digital-tech.jpg"
-                            alt="Digital Tech Division"
+                            src="/bg2.png"
+                            alt="Digital Tech"
                             fill
-                            className="object-cover group-hover:scale-105 transition-transform duration-700"
+                            className="object-cover transition-transform duration-1000 group-hover:scale-110"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                     </div>
 
-                    {/* Content Section */}
-                    <div className="p-8 flex flex-col justify-between flex-1">
-                        <div>
-                            <div className="w-12 h-12 rounded-full bg-brand-teal/10 flex items-center justify-center mb-6 text-brand-teal">
-                                <Icon icon="solar:code-scan-bold-duotone" className="text-2xl" />
-                            </div>
-                            <h3 className="text-2xl md:text-3xl font-medium mb-4 tracking-tight text-neutral-900">Digital Tech Division</h3>
-                            <p className="text-lg text-neutral-600 font-light leading-relaxed mb-8">
-                                The operating system for trade. Proprietary APIs, smart contracts, and real-time documentation automation.
-                            </p>
+                    {/* Content Overlay */}
+                    <div className="relative z-20 p-8 md:p-12 text-white bg-gradient-to-t from-teal-950/90 via-teal-900/50 to-transparent h-full flex flex-col justify-end items-start border border-white/10 rounded-[2.5rem]">
+
+                        <div className="bg-white/10 backdrop-blur-md p-3 rounded-2xl mb-6 border border-white/20">
+                            <Icon icon="solar:code-scan-bold-duotone" className="text-3xl text-brand-teal" />
                         </div>
-                        <Link href="/digital" className="inline-flex items-center gap-2 text-brand-teal font-semibold group-hover:gap-3 transition-all">
-                            Explore Digital Tools
-                            <Icon icon="solar:arrow-right-linear" className="text-lg" />
+
+                        <h3 className="text-3xl md:text-5xl font-medium mb-4 tracking-tight leading-none">
+                            Digital <br /> Tech Division
+                        </h3>
+
+                        <p className={`
+                            text-lg text-neutral-200 font-light leading-relaxed mb-8 max-w-md transition-all duration-500 overflow-hidden
+                            ${activeCard === 'physical' ? 'h-0 opacity-0 mb-0' : 'h-auto opacity-100'}
+                        `}>
+                            The operating system for trade. Proprietary APIs, smart contracts, and real-time documentation automation.
+                        </p>
+
+                        <Link href="/digital"
+                            className={`
+                                inline-flex items-center gap-3 text-white bg-white/20 backdrop-blur-sm border border-white/30 px-8 py-4 rounded-full 
+                                hover:bg-brand-teal hover:border-brand-teal transition-all duration-300
+                                ${activeCard === 'physical' ? 'scale-0 opacity-0' : 'scale-100 opacity-100'}
+                            `}
+                        >
+                            <span className="font-semibold">Explore Digital</span>
+                            <Icon icon="solar:arrow-right-linear" className="text-xl" />
                         </Link>
                     </div>
                 </div>
