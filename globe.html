@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Futuristic 3D Globe Animation</title>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+        background-color: #0a5338;
+        color: #ffffff;
+        font-family: "Inter", sans-serif;
+      }
+      canvas {
+        display: block;
+        background-color: transparent;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script> -->
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.157.0/examples/jsm/"
+        }
+      }
+    </script>
+    <script type="module">
+      import * as THREE from "three";
+      import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+      import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
+      import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
+      import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
+
+      let scene, camera, renderer, composer, globe, controls;
+      let useComposer = false;
+      const ENABLE_BLOOM = false; // disable bloom to preserve transparent background
+      let animatedArrows = [];
+      let effects = [];
+      let pathObjects = [];
+      let hotspots = [];
+
+      // --- UTILITY FUNCTIONS ---
+      function latLonToVector3(lat, lon, radius) {
+        const phi = (90 - lat) * (Math.PI / 180);
+        const theta = (lon + 180) * (Math.PI / 180);
+
+        const x = -(radius * Math.sin(phi) * Math.cos(theta));
+        const y = radius * Math.cos(phi);
+        const z = radius * Math.sin(phi) * Math.sin(theta);
+
+        return new THREE.Vector3(x, y, z);
+      }
+
+      // --- CORE INITIALIZATION ---
+      function init() {
+        // Scene
+        scene = new THREE.Scene();
+
+        // Camera
+        camera = new THREE.PerspectiveCamera(
+          75,
+          window.innerWidth / window.innerHeight,
+          0.1,
+          1000
+        );
+
+        // Set initial view to India
+        const indiaPosition = latLonToVector3(20.5937, 78.9629, 5); // Lat/Lon for India
+        camera.position.copy(indiaPosition.normalize().multiplyScalar(9.6));
+
+        // Renderer
+        renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setClearColor(0x000000, 0);
+        renderer.setClearAlpha(0);
+        renderer.autoClear = false;
+        renderer.domElement.style.background = "transparent";
+        document.body.appendChild(renderer.domElement);
+
+        // Controls
+        controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.minDistance = 8;
+        controls.maxDistance = 40;
+        controls.enablePan = false;
+        controls.target.set(0, 0, 0); // Ensure controls are looking at the center
+
+        // Post-processing for Bloom/Glow effect
+        const renderScene = new RenderPass(scene, camera);
+        renderScene.clear = true;
+        renderScene.clearColor = new THREE.Color(0x000000);
+        renderScene.clearAlpha = 0;
+        // Enhanced bloom for a more prominent "ozone" effect
+        if (ENABLE_BLOOM) {
+          const bloomPass = new UnrealBloomPass(
+            new THREE.Vector2(window.innerWidth, window.innerHeight),
+            1.5,
+            0.4,
+            0.85
+          );
+          bloomPass.threshold = 0;
+          bloomPass.strength = 2.5; // Increased glow strength
+          bloomPass.radius = 1.0; // Wider glow radius
+
+          composer = new EffectComposer(renderer);
+          composer.addPass(renderScene);
+          composer.addPass(bloomPass);
+          useComposer = true;
+        }
+
+        // --- OBJECT CREATION ---
+        createGlobe();
+        createContinentPoints();
+        createDataStreams();
+
+        // --- EVENT LISTENERS ---
+        window.addEventListener("resize", onWindowResize, false);
+
+        // Start animation loop
+        animate();
+      }
+
+      // --- GLOBE AND CONTINENTS ---
+      function createGlobe() {
+        const globeRadius = 5;
+
+        // The main semi-transparent sphere
+        const globeGeometry = new THREE.SphereGeometry(globeRadius, 200, 200);
+        const globeMaterial = new THREE.MeshStandardMaterial({
+          color: 0xe9ff5e,
+          transparent: true,
+          opacity: 0.2,
+          roughness: 0.9,
+        });
+        globe = new THREE.Mesh(globeGeometry, globeMaterial);
+        scene.add(globe);
+
+        // More subtle wireframe layer
+        const wireframeGeometry = new THREE.SphereGeometry(
+          globeRadius + 0.01,
+          32,
+          32
+        );
+        const wireframeMaterial = new THREE.MeshBasicMaterial({
+          color: 0xe9ff5e,
+          wireframe: true,
+          transparent: true,
+          opacity: 0.02,
+        });
+        const wireframe = new THREE.Mesh(wireframeGeometry, wireframeMaterial);
+        globe.add(wireframe);
+
+        // Atmospheric glow - adjusted for a thicker, more defined look
+        const atmosphereGeometry = new THREE.SphereGeometry(
+          globeRadius + 0.6,
+          104,
+          104
+        );
+        const atmosphereMaterial = new THREE.ShaderMaterial({
+          vertexShader: `
+                    varying vec3 vNormal;
+                    void main() {
+                        vNormal = normalize(normalMatrix * normal);
+                        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                    }
+                `,
+          fragmentShader: `
+                    varying vec3 vNormal;
+                    void main() {
+                    // Adjusted pow and dot product for a thicker, brighter rim
+                        // float intensity = pow(0.7 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 4.0);
+                        // Stronger, thicker rim by lowering exponent and boosting intensity
+                        float rim = max(0.0, 0.7 - dot(vNormal, vec3(0.0, 0.0, 1.0)));
+                        float intensity = 1.6 * pow(rim, 3.0);
+                        gl_FragColor = vec4(0.9137, 1.0, 0.3686, 1.0) * intensity;
+                    }
+                `,
+          side: THREE.BackSide,
+          blending: THREE.AdditiveBlending,
+          transparent: true,
+        });
+        const atmosphere = new THREE.Mesh(
+          atmosphereGeometry,
+          atmosphereMaterial
+        );
+        scene.add(atmosphere);
+      }
+
+      function createContinentPoints() {
+        fetch(
+          "https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json"
+        )
+          .then((res) => res.json())
+          .then((data) => {
+            const points = [];
+            const globeRadius = 5;
+
+            data.features.forEach((feature) => {
+              const type = feature.geometry.type;
+              const coordinates = feature.geometry.coordinates;
+
+              const processPolygon = (polygon) => {
+                polygon.forEach((point) => {
+                  // Increased point count for even higher density
+                  if (Math.random() > 0.05) {
+                    const pos = latLonToVector3(
+                      point[1],
+                      point[0],
+                      globeRadius
+                    );
+                    points.push(pos);
+                  }
+                });
+              };
+
+              if (type === "Polygon") {
+                processPolygon(coordinates[0]);
+              } else if (type === "MultiPolygon") {
+                coordinates.forEach((polygon) => {
+                  processPolygon(polygon[0]);
+                });
+              }
+            });
+
+            const pointsGeometry = new THREE.BufferGeometry().setFromPoints(
+              points
+            );
+
+            // Using a custom shader material to make back-facing points transparent
+            const pointsMaterial = new THREE.ShaderMaterial({
+              vertexShader: `
+                        varying float vDot;
+                        void main() {
+                            vec4 worldPosition = modelMatrix * vec4(position, 1.0);
+                            vec3 worldNormal = normalize(worldPosition.xyz);
+                            vec3 viewVector = normalize(cameraPosition - worldPosition.xyz);
+                            vDot = dot(worldNormal, viewVector);
+
+                            vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+                            // Further decreased point size for a finer, more detailed look
+                            gl_PointSize = 0.02 * (300.0 / -mvPosition.z);
+                            gl_Position = projectionMatrix * mvPosition;
+                        }
+                    `,
+              fragmentShader: `
+                        varying float vDot;
+                        void main() {
+                            // Smoothly fade out points on the back side of the globe
+                            float opacity = smoothstep(0.0, 0.2, vDot);
+                            // Cull pixels that are almost fully transparent
+                            if (opacity < 0.1) discard; 
+
+                            gl_FragColor = vec4(vec3(0.9137, 1.0, 0.3686), opacity);
+                        }
+                    `,
+              transparent: true,
+              blending: THREE.AdditiveBlending, // Enhances the glowing effect
+            });
+
+            const continentPoints = new THREE.Points(
+              pointsGeometry,
+              pointsMaterial
+            );
+            globe.add(continentPoints);
+          });
+      }
+
+      // --- HOTSPOT EFFECT ---
+      function createHotspot(coords, radius) {
+        const position = latLonToVector3(coords.lat, coords.lon, radius);
+        const hotspotLife = 3.0;
+
+        for (let i = 0; i < 3; i++) {
+          // Create 3 ripples for the hotspot
+          const hotspotGeometry = new THREE.RingGeometry(0.08, 0.07, 12); // Ripple width decreased by 50%
+          const hotspotMaterial = new THREE.MeshBasicMaterial({
+            color: 0xe9ff5e,
+            transparent: true,
+            blending: THREE.AdditiveBlending,
+            side: THREE.DoubleSide,
+          });
+
+          const hotspot = new THREE.Mesh(hotspotGeometry, hotspotMaterial);
+          hotspot.position.copy(position);
+          hotspot.lookAt(position.clone().multiplyScalar(2)); // Orient to surface
+
+          hotspots.push({
+            mesh: hotspot,
+            life: hotspotLife,
+            maxLife: hotspotLife,
+            delay: i * 1, // Stagger the start of each ripple
+          });
+          globe.add(hotspot);
+        }
+      }
+
+      // --- DATA STREAMS (ARROWS) ---
+      function createDataStreams() {
+        const globeRadius = 5;
+        const indiaCoords = { lat: 19.076, lon: 72.8777 };
+
+        createHotspot(indiaCoords, globeRadius);
+
+        // Define start and end points in Lat/Lon
+        // Europe
+        const path1 = {
+          start: indiaCoords,
+          end: { lat: 51.5074, lon: -0.1278 },
+        }; // UK (London)
+        const path2 = { start: indiaCoords, end: { lat: 52.52, lon: 13.405 } }; // Germany (Berlin)
+        // const path3 = { start: indiaCoords, end: { lat: 48.8566, lon: 2.3522 } }; // France (Paris)
+        // const path4 = { start: indiaCoords, end: { lat: 41.9028, lon: 12.4964 } }; // Italy (Rome)
+        // const path5 = { start: indiaCoords, end: { lat: 40.4168, lon: -3.7038 } }; // Spain (Madrid)
+        const path6 = {
+          start: indiaCoords,
+          end: { lat: 55.7558, lon: 37.6173 },
+        }; // Russia (Moscow)
+        const path7 = {
+          start: indiaCoords,
+          end: { lat: 50.0755, lon: 14.4378 },
+        }; // Czech Republic (Prague)
+
+        // Middle East
+        const path8 = {
+          start: indiaCoords,
+          end: { lat: 25.2048, lon: 55.2708 },
+        }; // UAE (Dubai)
+        // const path9 = { start: indiaCoords, end: { lat: 24.7136, lon: 46.6753 } }; // Saudi Arabia (Riyadh)
+        const path10 = {
+          start: indiaCoords,
+          end: { lat: 29.3759, lon: 47.9774 },
+        }; // Kuwait City
+        // const path11 = { start: indiaCoords, end: { lat: 33.3152, lon: 44.3661 } }; // Iraq (Baghdad)
+        const path12 = {
+          start: indiaCoords,
+          end: { lat: 30.0444, lon: 31.2357 },
+        }; // Egypt (Cairo)
+
+        // Asia
+        const path13 = {
+          start: indiaCoords,
+          end: { lat: 39.9042, lon: 116.4074 },
+        }; // China (Beijing)
+        const path14 = {
+          start: indiaCoords,
+          end: { lat: 35.6895, lon: 139.6917 },
+        }; // Japan (Tokyo)
+        // const path15 = { start: indiaCoords, end: { lat: 37.5665, lon: 126.9780 } }; // South Korea (Seoul)
+        // const path16 = { start: indiaCoords, end: { lat: 13.7563, lon: 100.5018 } }; // Thailand (Bangkok)
+        const path17 = {
+          start: indiaCoords,
+          end: { lat: 1.3521, lon: 103.8198 },
+        }; // Singapore
+        // const path18 = { start: indiaCoords, end: { lat: 3.1390, lon: 101.6869 } }; // Malaysia (Kuala Lumpur)
+        const path19 = {
+          start: indiaCoords,
+          end: { lat: 14.5995, lon: 120.9842 },
+        }; // Philippines (Manila)
+
+        // Africa
+        const path20 = {
+          start: indiaCoords,
+          end: { lat: -1.2921, lon: 36.8219 },
+        }; // Kenya (Nairobi)
+        // const path21 = { start: indiaCoords, end: { lat: -26.2041, lon: 28.0473 } }; // South Africa (Johannesburg)
+        // const path22 = { start: indiaCoords, end: { lat: 6.5244, lon: 3.3792 } }; // Nigeria (Lagos)
+        const path23 = {
+          start: indiaCoords,
+          end: { lat: 9.0054, lon: 38.7636 },
+        }; // Ethiopia (Addis Ababa)
+
+        // Americas
+        const path24 = {
+          start: indiaCoords,
+          end: { lat: 40.7128, lon: -74.006 },
+        }; // USA (New York)
+        const path25 = {
+          start: indiaCoords,
+          end: { lat: 45.4215, lon: -75.6997 },
+        }; // Canada (Ottawa)
+        // const path26 = { start: indiaCoords, end: { lat: -23.5505, lon: -46.6333 } }; // Brazil (São Paulo)
+        // const path27 = { start: indiaCoords, end: { lat: -34.6037, lon: -58.3816 } }; // Argentina (Buenos Aires)
+        // const path28 = { start: indiaCoords, end: { lat: 19.4326, lon: -99.1332 } }; // Mexico City
+
+        // Oceania
+        const path29 = {
+          start: indiaCoords,
+          end: { lat: -33.8688, lon: 151.2093 },
+        }; // Australia (Sydney)
+        const path30 = {
+          start: indiaCoords,
+          end: { lat: -36.8485, lon: 174.7633 },
+        }; // New Zealand (Auckland)
+
+        const allPaths = [
+          path1,
+          path2,
+          path6,
+          path7,
+          path8,
+          path10,
+          path12,
+          path13,
+          path14,
+          path17,
+          path19,
+          path20,
+          path23,
+          path24,
+          path25,
+          ,
+          path29,
+          path30,
+        ];
+
+        allPaths.forEach((path) => {
+          createAnimatedCurve(path.start, path.end, globeRadius, false);
+          createAnimatedCurve(path.end, path.start, globeRadius, true);
+        });
+      }
+
+      function createAnimatedCurve(startCoords, endCoords, radius, reverse) {
+        const startVector = latLonToVector3(
+          startCoords.lat,
+          startCoords.lon,
+          radius
+        );
+        const endVector = latLonToVector3(endCoords.lat, endCoords.lon, radius);
+
+        const midPoint = new THREE.Vector3()
+          .addVectors(startVector, endVector)
+          .multiplyScalar(0.5);
+        const distance = startVector.distanceTo(endVector);
+        midPoint.normalize().multiplyScalar(radius + distance * 0.4); // Control point for the arc
+
+        const curve = new THREE.QuadraticBezierCurve3(
+          startVector,
+          midPoint,
+          endVector
+        );
+
+        // Faint visible line for the path
+        const points = curve.getPoints(50);
+        const curveGeometry = new THREE.BufferGeometry().setFromPoints(points);
+        const curveMaterial = new THREE.LineBasicMaterial({
+          color: 0xe9ff5e,
+          transparent: true,
+          opacity: 0.2,
+          linewidth: 1,
+        });
+        const curveObject = new THREE.Line(curveGeometry, curveMaterial);
+        globe.add(curveObject);
+        pathObjects.push({ line: curveObject, curve: curve });
+
+        // Create the animated glowing arrow
+        const arrowGeometry = new THREE.ConeGeometry(0.04, 0.1, 8);
+        arrowGeometry.rotateX(Math.PI / 2);
+        const arrowMaterial = new THREE.MeshBasicMaterial({ color: 0xe9ff5e });
+        const arrow = new THREE.Mesh(arrowGeometry, arrowMaterial);
+
+        animatedArrows.push({
+          arrow: arrow,
+          curve: curve,
+          progress: Math.random(),
+          speed: 0.002, // slower speed of arrow
+          reverse: reverse,
+        });
+        globe.add(arrow);
+      }
+
+      // --- RIPPLE EFFECT ---
+      function createRippleEffect(position) {
+        const rippleLife = 0.75;
+
+        for (let i = 0; i < 3; i++) {
+          // Create 3 ripples
+          const rippleGeometry = new THREE.RingGeometry(0.05, 0.06, 32); // Width reduced
+          const rippleMaterial = new THREE.MeshBasicMaterial({
+            color: 0xffffff,
+            transparent: true,
+            blending: THREE.AdditiveBlending,
+            side: THREE.DoubleSide,
+          });
+
+          const ripple = new THREE.Mesh(rippleGeometry, rippleMaterial);
+          ripple.position.copy(position);
+
+          // Orient the ripple to be tangent to the globe's surface
+          ripple.lookAt(position.clone().multiplyScalar(2));
+
+          effects.push({
+            mesh: ripple,
+            life: rippleLife,
+            maxLife: rippleLife,
+            delay: i * 10, // Delay each ripple by 10 frames
+          });
+          globe.add(ripple);
+        }
+      }
+
+      // --- ANIMATION & RESIZING ---
+      function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        if (useComposer)
+          composer.setSize(window.innerWidth, window.innerHeight);
+      }
+
+      function animate() {
+        requestAnimationFrame(animate);
+
+        // Rotate the globe slowly
+        if (globe) {
+          globe.rotation.y += 0.0002; // slower rotation of globe
+        }
+
+        // Hide path lines on the back of the globe
+        pathObjects.forEach((path) => {
+          const midPointLocal = path.curve.getPoint(0.5);
+          const worldPosition = midPointLocal
+            .clone()
+            .applyMatrix4(globe.matrixWorld);
+          const normal = worldPosition.clone().normalize();
+          const viewVector = new THREE.Vector3()
+            .subVectors(camera.position, worldPosition)
+            .normalize();
+          const dotProduct = normal.dot(viewVector);
+          path.line.visible = dotProduct > -0.1; // Lenient threshold for lines
+        });
+
+        // Animate arrows along their curves
+        animatedArrows.forEach((item) => {
+          if (item.reverse) {
+            item.progress -= item.speed;
+            if (item.progress < 0) {
+              const impactPosition = item.curve.getPoint(0);
+              createRippleEffect(impactPosition);
+              item.progress = 1;
+            }
+          } else {
+            item.progress += item.speed;
+            if (item.progress > 1) {
+              const impactPosition = item.curve.getPoint(1);
+              createRippleEffect(impactPosition);
+              item.progress = 0;
+            }
+          }
+
+          const point = item.curve.getPoint(item.progress);
+          item.arrow.position.copy(point);
+
+          // Point the arrow along the curve's tangent
+          const tangent = item.curve.getTangent(item.progress).normalize();
+          item.arrow.quaternion.setFromUnitVectors(
+            new THREE.Vector3(0, 0, 1),
+            tangent
+          );
+
+          // Hide the arrow if it's on the back side of the globe
+          const worldPosition = new THREE.Vector3();
+          item.arrow.getWorldPosition(worldPosition);
+          const normal = worldPosition.clone().normalize();
+          const viewVector = new THREE.Vector3()
+            .subVectors(camera.position, worldPosition)
+            .normalize();
+          const dotProduct = normal.dot(viewVector);
+          item.arrow.visible = dotProduct > 0.1; // Use a threshold to prevent flickering
+        });
+
+        // Animate hotspots
+        hotspots.forEach((hotspot) => {
+          if (hotspot.delay > 0) {
+            hotspot.delay--;
+            return; // Wait for delay
+          }
+
+          hotspot.life -= 0.015; // Animation speed
+
+          // Hide the hotspot if it's on the back side of the globe
+          const worldPosition = new THREE.Vector3();
+          hotspot.mesh.getWorldPosition(worldPosition);
+          const normal = worldPosition.clone().normalize();
+          const viewVector = new THREE.Vector3()
+            .subVectors(camera.position, worldPosition)
+            .normalize();
+          const dotProduct = normal.dot(viewVector);
+          hotspot.mesh.visible = dotProduct > 0.1;
+
+          if (hotspot.life <= 0) {
+            hotspot.life = hotspot.maxLife; // Reset the cycle for continuous pulse
+          }
+
+          const progress = 1 - hotspot.life / hotspot.maxLife;
+          const currentScale = 1 + progress * 2;
+          hotspot.mesh.scale.set(currentScale, currentScale, currentScale);
+          hotspot.mesh.material.opacity =
+            (hotspot.life / hotspot.maxLife) * 0.5;
+        });
+
+        // Animate ripple effects
+        for (let i = effects.length - 1; i >= 0; i--) {
+          const effect = effects[i];
+
+          if (effect.delay > 0) {
+            effect.delay--;
+            continue;
+          }
+
+          effect.life -= 0.015;
+
+          // Hide the ripple if it's on the back side of the globe
+          const worldPosition = new THREE.Vector3();
+          effect.mesh.getWorldPosition(worldPosition);
+          const normal = worldPosition.clone().normalize();
+          const viewVector = new THREE.Vector3()
+            .subVectors(camera.position, worldPosition)
+            .normalize();
+          const dotProduct = normal.dot(viewVector);
+          effect.mesh.visible = dotProduct > 0.1;
+
+          if (effect.life <= 0) {
+            globe.remove(effect.mesh);
+            effects.splice(i, 1);
+          } else {
+            const progress = 1 - effect.life / effect.maxLife;
+            const currentScale = 1 + progress * 2;
+            effect.mesh.scale.set(currentScale, currentScale, currentScale);
+            effect.mesh.material.opacity = (effect.life / effect.maxLife) * 0.5;
+          }
+        }
+
+        controls.update();
+        renderer.clear(true, true, true);
+        if (useComposer) {
+          composer.render();
+        } else {
+          renderer.render(scene, camera);
+        }
+      }
+
+      // --- START ---
+      init();
+    </script>
+  </body>
+</html>

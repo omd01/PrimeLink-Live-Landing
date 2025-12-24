@@ -1,6 +1,8 @@
 "use client";
 
 import { Icon } from '@iconify/react';
+import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Services() {
     return (
@@ -13,71 +15,67 @@ export default function Services() {
                 </h2>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
 
-                {/* Card 1: Sourcing (Physical) */}
-                <div className="group relative p-8 md:p-10 rounded-3xl bg-neutral-50 border border-neutral-200 hover:border-brand-teal/30 hover:bg-white hover:shadow-xl transition-all duration-300 flex flex-col justify-between h-auto md:h-96 gap-6 overflow-hidden">
-                    {/* Hover Glow */}
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-brand-teal/5 rounded-full blur-3xl group-hover:bg-brand-teal/10 transition-all"></div>
-
-                    <div>
-                        <div className="w-12 h-12 rounded-full bg-neutral-200 flex items-center justify-center mb-6 group-hover:bg-brand-teal group-hover:text-white transition-colors text-neutral-900">
-                            <Icon icon="solar:hand-shake-linear" className="text-2xl" />
-                        </div>
-                        <h3 className="text-2xl md:text-3xl font-medium mb-4 tracking-tight text-neutral-900">Source</h3>
-                        <p className="text-lg text-neutral-600 font-light leading-relaxed">
-                            Direct access to verified Indian manufacturers. We handle negotiation, QC, and procurement physically.
-                        </p>
+                {/* Card 1: Physical Division */}
+                <div className="group relative rounded-3xl bg-white border border-neutral-200 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col h-full">
+                    {/* Image Section */}
+                    <div className="relative h-64 md:h-72 w-full overflow-hidden">
+                        <Image
+                            src="/physical-trade.jpg"
+                            alt="Physical Trade Division"
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-700"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                     </div>
-                    <div className="flex justify-between items-end border-t border-neutral-200 pt-4 mt-4">
-                        <span className="text-xs font-mono text-neutral-500 uppercase tracking-widest">Physical Division</span>
-                        <span className="w-10 h-10 rounded-full border border-neutral-200 flex items-center justify-center group-hover:bg-brand-teal group-hover:text-white transition-all duration-300 text-neutral-400">
+
+                    {/* Content Section */}
+                    <div className="p-8 flex flex-col justify-between flex-1">
+                        <div>
+                            <div className="w-12 h-12 rounded-full bg-brand-amber/10 flex items-center justify-center mb-6 text-brand-amber">
+                                <Icon icon="solar:box-minimalistic-bold-duotone" className="text-2xl" />
+                            </div>
+                            <h3 className="text-2xl md:text-3xl font-medium mb-4 tracking-tight text-neutral-900">Physical Trade Division</h3>
+                            <p className="text-lg text-neutral-600 font-light leading-relaxed mb-8">
+                                End-to-end execution. We source verified products and handle the entire logistics chain from factory to port.
+                            </p>
+                        </div>
+                        <Link href="/physical" className="inline-flex items-center gap-2 text-brand-amber font-semibold group-hover:gap-3 transition-all">
+                            Explore Physical Services
                             <Icon icon="solar:arrow-right-linear" className="text-lg" />
-                        </span>
+                        </Link>
                     </div>
                 </div>
 
-                {/* Card 2: Logistics (Movement) */}
-                <div className="group relative p-8 md:p-10 rounded-3xl bg-neutral-50 border border-neutral-200 hover:border-brand-amber/30 hover:bg-white hover:shadow-xl transition-all duration-300 flex flex-col justify-between h-auto md:h-96 gap-6 overflow-hidden">
-                    {/* Hover Glow */}
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-brand-amber/5 rounded-full blur-3xl group-hover:bg-brand-amber/10 transition-all"></div>
+                {/* Card 2: Digital Division */}
+                <div className="group relative rounded-3xl bg-white border border-neutral-200 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col h-full">
+                    {/* Image Section */}
+                    <div className="relative h-64 md:h-72 w-full overflow-hidden">
+                        <Image
+                            src="/digital-tech.jpg"
+                            alt="Digital Tech Division"
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-700"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                    </div>
 
-                    <div>
-                        <div className="w-12 h-12 rounded-full bg-neutral-200 flex items-center justify-center mb-6 group-hover:bg-brand-amber group-hover:text-white transition-colors text-neutral-900">
-                            <Icon icon="solar:box-minimalistic-linear" className="text-2xl" />
+                    {/* Content Section */}
+                    <div className="p-8 flex flex-col justify-between flex-1">
+                        <div>
+                            <div className="w-12 h-12 rounded-full bg-brand-teal/10 flex items-center justify-center mb-6 text-brand-teal">
+                                <Icon icon="solar:code-scan-bold-duotone" className="text-2xl" />
+                            </div>
+                            <h3 className="text-2xl md:text-3xl font-medium mb-4 tracking-tight text-neutral-900">Digital Tech Division</h3>
+                            <p className="text-lg text-neutral-600 font-light leading-relaxed mb-8">
+                                The operating system for trade. Proprietary APIs, smart contracts, and real-time documentation automation.
+                            </p>
                         </div>
-                        <h3 className="text-2xl md:text-3xl font-medium mb-4 tracking-tight text-neutral-900">Move</h3>
-                        <p className="text-lg text-neutral-600 font-light leading-relaxed">
-                            End-to-end freight management. From customs clearance to container stuffing, we move it on the ground.
-                        </p>
-                    </div>
-                    <div className="flex justify-between items-end border-t border-neutral-200 pt-4 mt-4">
-                        <span className="text-xs font-mono text-neutral-500 uppercase tracking-widest">Logistics Division</span>
-                        <span className="w-10 h-10 rounded-full border border-neutral-200 flex items-center justify-center group-hover:bg-brand-amber group-hover:text-white transition-all duration-300 text-neutral-400">
+                        <Link href="/digital" className="inline-flex items-center gap-2 text-brand-teal font-semibold group-hover:gap-3 transition-all">
+                            Explore Digital Tools
                             <Icon icon="solar:arrow-right-linear" className="text-lg" />
-                        </span>
-                    </div>
-                </div>
-
-                {/* Card 3: Digital (Tech) */}
-                <div className="group relative p-8 md:p-10 rounded-3xl bg-neutral-50 border border-neutral-200 hover:border-neutral-300 hover:bg-white hover:shadow-xl transition-all duration-300 flex flex-col justify-between h-auto md:h-96 gap-6 overflow-hidden">
-                    {/* Hover Glow */}
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-neutral-200/50 rounded-full blur-3xl group-hover:bg-neutral-200 transition-all"></div>
-
-                    <div>
-                        <div className="w-12 h-12 rounded-full bg-neutral-200 flex items-center justify-center mb-6 group-hover:bg-neutral-900 group-hover:text-white transition-colors text-neutral-900">
-                            <Icon icon="solar:code-scan-linear" className="text-2xl" />
-                        </div>
-                        <h3 className="text-2xl md:text-3xl font-medium mb-4 tracking-tight text-neutral-900">Digitize</h3>
-                        <p className="text-lg text-neutral-600 font-light leading-relaxed">
-                            PrimeVerify APIs and SmartContracts. Automate your documentation and verify entities instantly.
-                        </p>
-                    </div>
-                    <div className="flex justify-between items-end border-t border-neutral-200 pt-4 mt-4">
-                        <span className="text-xs font-mono text-neutral-500 uppercase tracking-widest">Digital Division</span>
-                        <span className="w-10 h-10 rounded-full border border-neutral-200 flex items-center justify-center group-hover:bg-neutral-900 group-hover:text-white transition-all duration-300 text-neutral-400">
-                            <Icon icon="solar:arrow-right-linear" className="text-lg" />
-                        </span>
+                        </Link>
                     </div>
                 </div>
 

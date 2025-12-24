@@ -16,7 +16,7 @@ export default function Hero() {
                 </div>
 
                 <h1 className="text-5xl md:text-6xl lg:text-8xl font-medium tracking-tighter leading-tight mb-8 text-neutral-900">
-                    Move cargo globally. <br />
+                    Move globally. <br />
                     Manage it <span className="text-brand-teal">digitally.</span>
                 </h1>
 
