@@ -1,26 +1,31 @@
 "use client";
 
+
+
+import { motion } from 'framer-motion';
+
 export default function Metrics() {
     return (
-        <section className="py-20 border-t border-neutral-200 bg-neutral-50">
-            <div className="max-w-7xl mx-auto px-6">
+        <section className="py-20 border-t border-neutral-200 bg-neutral-50 px-6">
+            <div className="max-w-7xl mx-auto">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 text-center divide-x divide-neutral-200">
-                    <div>
-                        <div className="text-4xl md:text-5xl font-bold text-neutral-900 mb-2">High</div>
-                        <div className="text-sm text-neutral-500 uppercase tracking-widest">Trade Volume</div>
-                    </div>
-                    <div>
-                        <div className="text-4xl md:text-5xl font-bold text-brand-teal mb-2">Global</div>
-                        <div className="text-sm text-neutral-500 uppercase tracking-widest">Shipments</div>
-                    </div>
-                    <div>
-                        <div className="text-4xl md:text-5xl font-bold text-neutral-900 mb-2">24/7</div>
-                        <div className="text-sm text-neutral-500 uppercase tracking-widest">Uptime</div>
-                    </div>
-                    <div>
-                        <div className="text-4xl md:text-5xl font-bold text-brand-amber mb-2">Fast</div>
-                        <div className="text-sm text-neutral-500 uppercase tracking-widest">Clearance</div>
-                    </div>
+                    {[
+                        { value: 'High', label: 'Trade Volume', color: 'text-neutral-900' },
+                        { value: 'Global', label: 'Shipments', color: 'text-brand-teal' },
+                        { value: '24/7', label: 'Uptime', color: 'text-neutral-900' },
+                        { value: 'Fast', label: 'Clearance', color: 'text-brand-amber' }
+                    ].map((item, index) => (
+                        <motion.div
+                            key={index}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: index * 0.1, duration: 0.5 }}
+                        >
+                            <div className={`text-4xl md:text-5xl font-bold mb-2 ${item.color}`}>{item.value}</div>
+                            <div className="text-sm text-neutral-500 uppercase tracking-widest">{item.label}</div>
+                        </motion.div>
+                    ))}
                 </div>
             </div>
         </section>

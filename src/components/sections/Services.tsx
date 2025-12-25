@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Icon } from '@iconify/react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 
 export default function Services() {
     const [activeCard, setActiveCard] = useState<'physical' | 'digital' | null>(null);
@@ -12,10 +13,16 @@ export default function Services() {
         <section className="max-w-7xl mx-auto py-24 mb-24 px-4 md:px-0">
 
             <div className="mb-16 max-w-4xl mx-auto text-center">
-                <h2 className="text-4xl md:text-5xl lg:text-7xl font-medium tracking-tighter mb-6 text-neutral-900 leading-[1.1]">
+                <motion.h2
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8 }}
+                    className="text-4xl md:text-5xl lg:text-7xl font-medium tracking-tighter mb-6 text-neutral-900 leading-[1.1]"
+                >
                     We bridge the gap between <br />
                     <span className="text-neutral-400">Physical Chaos</span> and <span className="text-brand-teal">Digital Order.</span>
-                </h2>
+                </motion.h2>
             </div>
 
             {/* Interactive Flex Container */}
@@ -25,7 +32,11 @@ export default function Services() {
             >
 
                 {/* Card 1: Physical Division */}
-                <div
+                <motion.div
+                    initial={{ opacity: 0, x: -50 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, ease: "easeOut" }}
                     onMouseEnter={() => setActiveCard('physical')}
                     className={`
                         relative rounded-[2.5rem] overflow-hidden group hover:shadow-2xl transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]
@@ -73,10 +84,14 @@ export default function Services() {
                             <Icon icon="solar:arrow-right-linear" className="text-xl" />
                         </Link>
                     </div>
-                </div>
+                </motion.div>
 
                 {/* Card 2: Digital Division */}
-                <div
+                <motion.div
+                    initial={{ opacity: 0, x: 50 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
                     onMouseEnter={() => setActiveCard('digital')}
                     className={`
                         relative rounded-[2.5rem] overflow-hidden group hover:shadow-2xl transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]
@@ -124,7 +139,7 @@ export default function Services() {
                             <Icon icon="solar:arrow-right-linear" className="text-xl" />
                         </Link>
                     </div>
-                </div>
+                </motion.div>
 
             </div>
         </section>

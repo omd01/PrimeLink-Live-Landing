@@ -1,10 +1,17 @@
 import type { Metadata } from "next";
-import { Outfit } from "next/font/google";
+import { Outfit, Rajdhani } from "next/font/google";
 import "./globals.css";
 
 const outfit = Outfit({
   subsets: ["latin"],
   variable: '--font-outfit',
+  display: 'swap',
+});
+
+const rajdhani = Rajdhani({
+  subsets: ["latin"],
+  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-rajdhani',
   display: 'swap',
 });
 
@@ -20,7 +27,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={`${outfit.variable} font-sans antialiased bg-white text-neutral-900 selection:bg-brand-teal selection:text-white overflow-x-hidden`}>
+      <body className={`${outfit.variable} ${rajdhani.variable} font-sans antialiased bg-white text-neutral-900 selection:bg-brand-teal selection:text-white overflow-x-hidden`}>
         {children}
       </body>
     </html>

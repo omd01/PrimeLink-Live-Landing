@@ -4,11 +4,11 @@ import { useEffect, useRef } from 'react';
 import { Icon } from '@iconify/react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { motion } from 'framer-motion';
 
 export default function GlobalReach() {
     const mountRef = useRef<HTMLDivElement>(null);
-
-    // Helper Math
+    // ... helper ...
     function latLonToVector3(lat: number, lon: number, radius: number) {
         const phi = (90 - lat) * (Math.PI / 180);
         const theta = (lon + 180) * (Math.PI / 180);
@@ -207,7 +207,13 @@ export default function GlobalReach() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
                 {/* Left Side: Content */}
-                <div className="order-2 lg:order-1">
+                <motion.div
+                    initial={{ opacity: 0, x: -30 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8 }}
+                    className="order-2 lg:order-1"
+                >
                     <span className="text-brand-amber font-mono text-sm tracking-widest uppercase mb-4 block">Global Infrastructure</span>
                     <h2 className="text-4xl md:text-5xl lg:text-6xl font-medium mb-8 leading-tight text-neutral-900">
                         Built on bedrock.<br />
@@ -229,7 +235,7 @@ export default function GlobalReach() {
                             <div className="text-sm text-neutral-500 font-medium">Verified Partners</div>
                         </div>
                     </div>
-                </div>
+                </motion.div>
 
                 {/* Right Side: The 3D Canvas + HUD (Light Mode) */}
                 <div className="order-1 lg:order-2 relative w-full aspect-square md:aspect-[4/3] bg-white rounded-3xl overflow-hidden shadow-xl border border-neutral-100">
