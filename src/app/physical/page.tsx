@@ -9,6 +9,8 @@ import {
 import { Icon } from '@iconify/react';
 import OurStory from '@/components/sections/OurStory';
 import Excellence from '@/components/sections/Excellence';
+import WhyUs from '@/components/sections/WhyUs';
+import Certifications from '@/components/sections/Certifications';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 
@@ -251,6 +253,8 @@ export default function PhysicalTradePage() {
             <Hero />
             <Excellence />
             <BentoGrid />
+            <WhyUs />
+            <Certifications />
             <OurStory />
             <RFQCalculator />
             <Footer />
