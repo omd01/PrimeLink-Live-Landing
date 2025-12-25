@@ -6,6 +6,12 @@ import GlobalReach from "@/components/sections/GlobalReach";
 import Metrics from "@/components/sections/Metrics";
 import Testimonials from "@/components/sections/Testimonials";
 import CTA from "@/components/sections/CTA";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "PrimeLink Exim | Global Trade Infrastructure",
+  description: "Optimize your global trade with PrimeLink Exim. Digital intelligence meeting physical logistics.",
+};
 
 export default function Home() {
   return (

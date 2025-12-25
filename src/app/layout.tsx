@@ -16,8 +16,28 @@ const rajdhani = Rajdhani({
 });
 
 export const metadata: Metadata = {
-  title: "PrimeLink Exim | The Trade OS",
+  title: {
+    default: "PrimeLink Exim | The Trade OS",
+    template: "%s | PrimeLink Exim"
+  },
   description: "The unified operating system for global trade. Bridging the gap between physical logistics and digital intelligence.",
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/favicon.ico', // fallback
+  },
+  keywords: ["Global Trade", "Export Import", "Logistics", "Supply Chain", "Commodities", "Digital Trade"],
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://primelinkexim.com", // Placeholder or actual if known
+    title: "PrimeLink Exim | The Trade OS",
+    description: "The unified operating system for global trade.",
+    siteName: "PrimeLink Exim",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  }
 };
 
 export default function RootLayout({
