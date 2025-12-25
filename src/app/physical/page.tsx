@@ -3,6 +3,7 @@
 import React, { useRef, useState } from 'react';
 import Image from 'next/image';
 import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion';
+import Link from 'next/link';
 import {
     ArrowUpRight
 } from 'lucide-react';
@@ -111,6 +112,8 @@ const Hero = () => {
                             <Icon icon="solar:shield-check-linear" className="text-[#F59E0B]" />
                             We respect your privacy. No spam.
                         </p>
+
+
                     </div>
                 </motion.div>
             </div>

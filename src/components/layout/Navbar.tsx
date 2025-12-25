@@ -68,7 +68,7 @@ export default function Navbar() {
                     </div>
 
                     {/* Desktop CTA */}
-                    <Link href="#"
+                    <Link href="/physical/brochure"
                         className="hidden lg:flex text-sm font-bold text-white bg-neutral-900 border  border-neutral-900 px-5 py-2.5 rounded-full hover:bg-brand-teal hover:border-brand-teal hover:text-white transition-all duration-300 ">
                         Explore Brochure
                     </Link>
@@ -114,7 +114,7 @@ export default function Navbar() {
                         </div>
                     ))}
 
-                    <Link href="#" onClick={toggleMenu}
+                    <Link href="/physical/brochure" onClick={toggleMenu}
                         className="mt-8 text-lg font-medium text-white bg-neutral-900 border border-neutral-900 px-10 py-4 rounded-full hover:bg-brand-teal hover:border-brand-teal hover:text-white transition-all duration-300 shadow-xl shadow-neutral-200">
                         Explore Brochure
                     </Link>
