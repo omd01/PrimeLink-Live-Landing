@@ -21,27 +21,27 @@ export default function Hero() {
     }, [isVideoModalOpen]);
 
     return (
-        <section className="max-w-7xl mx-auto mb-32 relative pt-2 md:pt-">
+        <section className="max-w-7xl mx-auto mb-12 md:mb-32 relative pt-2">
 
             {/* Hero Header Content - Center Aligned */}
             <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, ease: "easeOut" }}
-                className="flex flex-col items-center text-center max-w-5xl mx-auto mb-20 px-4"
+                className="flex flex-col items-center text-center max-w-5xl mx-auto mb-10 md:mb-20 px-4"
             >
-
+                {/* ... header content ... */}
                 <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.2, duration: 0.5 }}
-                    className="flex items-center gap-2 text-neutral-500 mb-8 text-sm md:text-base bg-white/50 backdrop-blur-sm px-4 py-2 rounded-full border border-neutral-100"
+                    className="flex items-center gap-2 text-neutral-500 mb-6 md:mb-8 text-sm md:text-base bg-white/50 backdrop-blur-sm px-4 py-2 rounded-full border border-neutral-100"
                 >
                     <span className="w-2 h-2 rounded-full bg-brand-teal animate-pulse"></span>
                     <span className="uppercase tracking-widest text-xs font-bold text-brand-teal">The Modern Trade Backbone</span>
                 </motion.div>
 
-                <h1 className="text-6xl md:text-7xl lg:text-8xl font-medium tracking-tighter leading-[1.1] mb-8 text-neutral-900">
+                <h1 className="text-4xl md:text-7xl lg:text-8xl font-medium tracking-tighter leading-[1.1] mb-6 md:mb-8 text-neutral-900">
                     The Operating System <br />
                     for <span className="text-brand-teal">Global Trade.</span>
                 </h1>
@@ -50,7 +50,7 @@ export default function Hero() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.4, duration: 0.8 }}
-                    className="text-lg md:text-xl text-neutral-600 leading-relaxed font-light max-w-2xl mx-auto mb-10"
+                    className="text-base md:text-xl text-neutral-600 leading-relaxed font-light max-w-2xl mx-auto mb-8 md:mb-10 px-2"
                 >
                     PrimeLink combines 20 years of physical logistics infrastructure with next-gen API verification.
                     Source products, book freight, and verify partners—all in one OS.
@@ -113,26 +113,26 @@ export default function Hero() {
                             className="absolute bottom-6 left-6 md:bottom-10 md:left-10 z-30 text-white"
                         >
                             <div className="flex items-center gap-2 mb-3">
-                                <span className="bg-green-500/20 text-green-400 border border-green-500/30 px-3 py-1 rounded-full text-xs font-mono uppercase tracking-wider backdrop-blur-md">
+                                <span className="bg-green-500/20 text-green-400 border border-green-500/30 px-3 py-1 rounded-full text-[10px] md:text-xs font-mono uppercase tracking-wider backdrop-blur-md">
                                     ● Quality Verified
                                 </span>
                             </div>
-                            <h3 className="text-2xl md:text-5xl font-medium tracking-tight mb-2">Order #ORG-8821</h3>
-                            <p className="text-white/60 text-sm md:text-lg">Origin: Kerala → Hamburg</p>
+                            <h3 className="text-xl md:text-5xl font-medium tracking-tight mb-2">Order #ORG-8821</h3>
+                            <p className="text-white/60 text-xs md:text-lg">Origin: Kerala → Hamburg</p>
                         </motion.div>
 
-                        {/* Floating Data Widget */}
+                        {/* Floating Data Widget - Adjusted for Mobile */}
                         <motion.div
                             initial={{ x: 50, opacity: 0 }}
                             animate={{ x: 0, opacity: 1 }}
                             transition={{ delay: 1.2, duration: 0.5 }}
-                            className="absolute top-6 right-6 md:top-10 md:right-10 z-30"
+                            className="hidden md:block absolute top-4 right-4 md:top-10 md:right-10 z-30"
                         >
-                            <div className="bg-neutral-900/60 backdrop-blur-md border border-white/10 p-4 md:p-6 rounded-2xl text-right shadow-2xl">
-                                <div className="text-xs text-neutral-400 uppercase tracking-widest mb-1">Net Weight</div>
-                                <div className="text-2xl md:text-3xl font-bold text-white mb-2">12,500 KG</div>
+                            <div className="bg-neutral-900/60 backdrop-blur-md border border-white/10 p-3 md:p-6 rounded-xl md:rounded-2xl text-right shadow-2xl scale-90 md:scale-100 origin-top-right">
+                                <div className="text-[10px] text-neutral-400 uppercase tracking-widest mb-1">Net Weight</div>
+                                <div className="text-xl md:text-3xl font-bold text-white mb-2">12,500 KG</div>
                                 <div className="flex justify-end">
-                                    <div className="h-1 w-24 bg-neutral-800 rounded-full overflow-hidden">
+                                    <div className="h-1 w-16 md:w-24 bg-neutral-800 rounded-full overflow-hidden">
                                         <motion.div
                                             initial={{ width: 0 }}
                                             animate={{ width: "80%" }}
@@ -144,6 +144,25 @@ export default function Hero() {
                             </div>
                         </motion.div>
 
+                    </div>
+                </div>
+
+                {/* Mobile-Only Net Weight Widget (Below the card) */}
+                <div className="mt-4 md:hidden">
+                    <div className="bg-white border border-neutral-200 p-4 rounded-2xl shadow-sm text-right">
+                        <div className="text-xs text-neutral-500 uppercase tracking-widest mb-1">Net Weight</div>
+                        <div className="text-2xl font-bold text-neutral-900 mb-2">12,500 KG</div>
+                        <div className="flex justify-end">
+                            <div className="h-1 w-24 bg-neutral-100 rounded-full overflow-hidden">
+                                <motion.div
+                                    initial={{ width: 0 }}
+                                    whileInView={{ width: "80%" }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: 0.2, duration: 1 }}
+                                    className="h-full bg-brand-teal rounded-full"
+                                />
+                            </div>
+                        </div>
                     </div>
                 </div>
 

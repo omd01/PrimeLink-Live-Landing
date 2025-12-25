@@ -10,7 +10,7 @@ export default function Services() {
     const [activeCard, setActiveCard] = useState<'physical' | 'digital' | null>(null);
 
     return (
-        <section className="max-w-7xl mx-auto py-24 mb-24 px-4 md:px-0">
+        <section className="max-w-7xl mx-auto py-12 md:py-24 mb-12 md:mb-24 px-4 md:px-0">
 
             <div className="mb-16 max-w-4xl mx-auto text-center">
                 <motion.h2
@@ -18,7 +18,7 @@ export default function Services() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.8 }}
-                    className="text-4xl md:text-5xl lg:text-7xl font-medium tracking-tighter mb-6 text-neutral-900 leading-[1.1]"
+                    className="text-3xl md:text-5xl lg:text-7xl font-medium tracking-tighter mb-6 text-neutral-900 leading-[1.1]"
                 >
                     We bridge the gap between <br />
                     <span className="text-neutral-400">Physical Chaos</span> and <span className="text-brand-teal">Digital Order.</span>

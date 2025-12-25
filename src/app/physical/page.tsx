@@ -4,18 +4,11 @@ import React, { useRef, useState } from 'react';
 import Image from 'next/image';
 import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion';
 import {
-    ArrowUpRight,
-    Box,
-    Globe,
-    ShieldCheck,
-    Anchor,
-    Ship,
-    FileCheck,
-    Truck,
-    CheckCircle2,
-    Search
+    ArrowUpRight
 } from 'lucide-react';
 import { Icon } from '@iconify/react';
+import OurStory from '@/components/sections/OurStory';
+import Excellence from '@/components/sections/Excellence';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 
@@ -86,7 +79,7 @@ const Hero = () => {
                     <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border mb-8 ${COLORS.glassBorder} bg-white/5 backdrop-blur-md`}>
                         <div className="w-2 h-2 rounded-full bg-[#F59E0B] animate-pulse" />
                         <span className={`text-[#F59E0B] text-xs font-bold tracking-[0.2em] uppercase ${FONT.header}`}>
-                            Global Trade Infrastructure
+                            Borders Crossed, Promises Kept.
                         </span>
                     </div>
 
@@ -196,76 +189,6 @@ const BentoGrid = () => {
     );
 };
 
-const Timeline = () => {
-    const ref = useRef(null);
-    const { scrollYProgress } = useScroll({
-        target: ref,
-        offset: ["start end", "end start"]
-    });
-
-    const scaleY = useSpring(scrollYProgress, {
-        stiffness: 100,
-        damping: 30,
-        restDelta: 0.001
-    });
-
-    const steps = [
-        { icon: Search, title: "Sourcing", desc: "AI-matched supplier discovery" },
-        { icon: FileCheck, title: "Compliance", desc: "Automated ICEGATE docs" },
-        { icon: Anchor, title: "Freight", desc: "Real-time container booking" },
-        { icon: Truck, title: "Delivery", desc: "Last-mile coordination" },
-    ];
-
-    return (
-        <section ref={ref} className="py-32 bg-[#022C22] relative overflow-hidden">
-            <div className="max-w-4xl mx-auto px-6 relative">
-                {/* Progress Line */}
-                <div className="absolute left-[39px] md:left-1/2 top-0 bottom-0 w-[2px] bg-white/5 -translate-x-1/2" />
-                <motion.div
-                    style={{ scaleY, transformOrigin: "top" }}
-                    className="absolute left-[39px] md:left-1/2 top-0 bottom-0 w-[2px] bg-[#F59E0B] -translate-x-1/2 z-10"
-                />
-
-                <div className="space-y-24">
-                    {steps.map((step, i) => (
-                        <motion.div
-                            key={i}
-                            initial={{ opacity: 0, x: i % 2 === 0 ? -50 : 50 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ margin: "-100px" }}
-                            transition={{ duration: 0.5 }}
-                            className={`flex items-center gap-8 md:gap-16 ${i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}
-                        >
-                            <div className="flex-1 md:text-right">
-                                {i % 2 === 0 && (
-                                    <div className="hidden md:block">
-                                        <div className={`text-[#F59E0B] text-sm font-bold uppercase tracking-widest mb-2 ${FONT.header}`}>Phase 0{i + 1}</div>
-                                        <h3 className={`text-4xl text-white font-bold uppercase mb-2 ${FONT.header}`}>{step.title}</h3>
-                                        <p className="text-white/60 font-light">{step.desc}</p>
-                                    </div>
-                                )}
-                            </div>
-
-                            <div className="relative z-20 flex-shrink-0">
-                                <div className="w-20 h-20 rounded-2xl bg-[#033a2d] border border-[#F59E0B]/50 flex items-center justify-center shadow-[0_0_30px_-10px_#F59E0B]">
-                                    <step.icon className="text-[#F59E0B]" size={32} />
-                                </div>
-                            </div>
-
-                            <div className="flex-1">
-                                <div className={`${i % 2 === 0 ? 'md:hidden' : 'block'}`}>
-                                    <div className={`text-[#F59E0B] text-sm font-bold uppercase tracking-widest mb-2 ${FONT.header}`}>Phase 0{i + 1}</div>
-                                    <h3 className={`text-4xl text-white font-bold uppercase mb-2 ${FONT.header}`}>{step.title}</h3>
-                                    <p className="text-white/60 font-light">{step.desc}</p>
-                                </div>
-                            </div>
-                        </motion.div>
-                    ))}
-                </div>
-            </div>
-        </section>
-    );
-};
 
 const RFQCalculator = () => {
     return (
@@ -319,13 +242,16 @@ const RFQCalculator = () => {
     );
 };
 
+
+
 export default function PhysicalTradePage() {
     return (
         <main className="min-h-screen bg-[#022C22] text-white selection:bg-[#F59E0B] selection:text-[#022C22]">
             <Navbar />
             <Hero />
+            <Excellence />
             <BentoGrid />
-            <Timeline />
+            <OurStory />
             <RFQCalculator />
             <Footer />
         </main>

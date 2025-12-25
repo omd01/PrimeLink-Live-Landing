@@ -21,10 +21,6 @@ export const metadata: Metadata = {
     template: "%s | PrimeLink Exim"
   },
   description: "The unified operating system for global trade. Bridging the gap between physical logistics and digital intelligence.",
-  icons: {
-    icon: '/favicon.ico',
-    apple: '/favicon.ico', // fallback
-  },
   keywords: ["Global Trade", "Export Import", "Logistics", "Supply Chain", "Commodities", "Digital Trade"],
   openGraph: {
     type: "website",

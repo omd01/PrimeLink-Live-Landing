@@ -18,7 +18,7 @@ export default function Testimonials() {
                     className="max-w-2xl"
                 >
                     <span className="text-brand-teal font-mono text-xs tracking-widest uppercase mb-4 block">Trust & Verification</span>
-                    <h2 className="text-4xl md:text-5xl font-medium text-neutral-900 leading-tight">
+                    <h2 className="text-3xl md:text-5xl font-medium text-neutral-900 leading-tight">
                         Powering the next generation <br />
                         <span className="text-neutral-400">of global trade.</span>
                     </h2>

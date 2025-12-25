@@ -215,7 +215,7 @@ export default function GlobalReach() {
                     className="order-2 lg:order-1"
                 >
                     <span className="text-brand-amber font-mono text-sm tracking-widest uppercase mb-4 block">Global Infrastructure</span>
-                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-medium mb-8 leading-tight text-neutral-900">
+                    <h2 className="text-3xl md:text-5xl lg:text-6xl font-medium mb-8 leading-tight text-neutral-900">
                         Built on bedrock.<br />
                         <span className="text-neutral-400">Not just code.</span>
                     </h2>
@@ -238,51 +238,55 @@ export default function GlobalReach() {
                 </motion.div>
 
                 {/* Right Side: The 3D Canvas + HUD (Light Mode) */}
-                <div className="order-1 lg:order-2 relative w-full aspect-square md:aspect-[4/3] bg-white rounded-3xl overflow-hidden shadow-xl border border-neutral-100">
+                <div className="order-1 lg:order-2 w-full">
+                    <div className="relative w-full h-[350px]  md:h-auto md:aspect-[4/3] bg-white rounded-3xl overflow-hidden shadow-xl border border-neutral-100 ">
 
-                    {/* The Globe Canvas (Transparent) */}
-                    <div ref={mountRef} className="absolute inset-0 z-0 opacity-100" />
+                        {/* The Globe Canvas (Transparent) */}
+                        <div ref={mountRef} className="absolute inset-0 z-0 opacity-100" />
 
-                    {/* HUD Overlay: Grid Lines (Grey) */}
-                    <div className="absolute inset-0 pointer-events-none"
-                        style={{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px)', backgroundSize: '40px 40px' }}>
-                    </div>
-
-                    {/* HUD Overlay: Status Badge (Light) */}
-                    <div className="absolute top-6 left-6 z-10">
-                        <div className="flex items-center gap-2 bg-white/80 backdrop-blur-md border border-neutral-200 px-3 py-1.5 rounded-full shadow-sm">
-                            <span className="relative flex h-2 w-2">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-teal opacity-75"></span>
-                                <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-teal"></span>
-                            </span>
-                            <span className="text-xs font-mono text-brand-teal tracking-wider font-semibold">SYSTEM ONLINE</span>
+                        {/* HUD Overlay: Grid Lines (Grey) */}
+                        <div className="absolute inset-0 pointer-events-none"
+                            style={{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px)', backgroundSize: '40px 40px' }}>
                         </div>
+
+                        {/* HUD Overlay: Status Badge (Light) */}
+                        <div className="absolute top-6 left-6 z-10">
+                            <div className="flex items-center gap-2 bg-white/80 backdrop-blur-md border border-neutral-200 px-3 py-1.5 rounded-full shadow-sm">
+                                <span className="relative flex h-2 w-2">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-teal opacity-75"></span>
+                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-teal"></span>
+                                </span>
+                                <span className="text-xs font-mono text-brand-teal tracking-wider font-semibold">SYSTEM ONLINE</span>
+                            </div>
+                        </div>
+
+
+
+                        {/* HUD Overlay: Bottom Bar (Dark text) */}
+                        <div className="absolute bottom-6 left-6 right-6 z-10 flex justify-between items-end text-neutral-400 font-mono text-xs">
+                            <div>
+                                <p>LAT: 20.5937 N</p>
+                                <p>LON: 78.9629 E</p>
+                            </div>
+                            <div className="text-right">
+                                <p>PRIMELINK OS v2.4</p>
+                                <p>SECURE CONNECTION</p>
+                            </div>
+                        </div>
+
                     </div>
 
-                    {/* HUD Overlay: Floating Metrics (Light) */}
-                    <div className="absolute top-6 right-6 z-10 flex flex-col gap-2">
-                        <div className="bg-white/80 backdrop-blur-md border border-neutral-200 px-4 py-3 rounded-xl text-right shadow-sm">
+                    {/* Mobile Metrics (Below the Globe) */}
+                    <div className="grid grid-cols-2 gap-4 mt-4 md:hidden">
+                        <div className="bg-white border border-neutral-200 px-4 py-3 rounded-2xl text-center shadow-sm">
                             <div className="text-[10px] text-neutral-400 uppercase tracking-widest mb-0.5">Active Vessels</div>
-                            <div className="text-lg font-bold text-neutral-900 font-mono">24</div>
+                            <div className="text-xl font-bold text-neutral-900 font-mono">24</div>
                         </div>
-                        <div className="bg-white/80 backdrop-blur-md border border-neutral-200 px-4 py-3 rounded-xl text-right shadow-sm">
+                        <div className="bg-white border border-neutral-200 px-4 py-3 rounded-2xl text-center shadow-sm">
                             <div className="text-[10px] text-neutral-400 uppercase tracking-widest mb-0.5">Latency</div>
-                            <div className="text-lg font-bold text-brand-teal font-mono">12ms</div>
+                            <div className="text-xl font-bold text-brand-teal font-mono">12ms</div>
                         </div>
                     </div>
-
-                    {/* HUD Overlay: Bottom Bar (Dark text) */}
-                    <div className="absolute bottom-6 left-6 right-6 z-10 flex justify-between items-end text-neutral-400 font-mono text-xs">
-                        <div>
-                            <p>LAT: 20.5937 N</p>
-                            <p>LON: 78.9629 E</p>
-                        </div>
-                        <div className="text-right">
-                            <p>PRIMELINK OS v2.4</p>
-                            <p>SECURE CONNECTION</p>
-                        </div>
-                    </div>
-
                 </div>
 
             </div>

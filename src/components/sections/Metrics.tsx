@@ -22,7 +22,7 @@ export default function Metrics() {
                             viewport={{ once: true }}
                             transition={{ delay: index * 0.1, duration: 0.5 }}
                         >
-                            <div className={`text-4xl md:text-5xl font-bold mb-2 ${item.color}`}>{item.value}</div>
+                            <div className={`text-3xl md:text-5xl font-bold mb-2 ${item.color}`}>{item.value}</div>
                             <div className="text-sm text-neutral-500 uppercase tracking-widest">{item.label}</div>
                         </motion.div>
                     ))}
