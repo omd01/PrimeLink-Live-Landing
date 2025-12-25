@@ -255,9 +255,7 @@ export default function PhysicalTradePage() {
             <BentoGrid />
             <WhyUs />
             <Certifications />
-            <OurStory />
-            <RFQCalculator />
-            <Footer />
+            <Footer theme="physical" />
         </main>
     );
 }
