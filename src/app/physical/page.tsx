@@ -254,8 +254,9 @@ export default function PhysicalTradePage() {
         <main className="min-h-screen bg-[#022C22] text-white selection:bg-[#F59E0B] selection:text-[#022C22]">
             <Navbar />
             <Hero />
-            <BentoGrid />
             <Excellence />
+            <BentoGrid />
+
             {/* <OurStory /> */}
             <WhyUs />
             <Certifications />
