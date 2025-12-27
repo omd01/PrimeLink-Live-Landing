@@ -78,7 +78,9 @@ export default function Footer({ theme = 'default' }: FooterProps) {
                             <li><Link href="#" className={`hover:${activeStyle.accent} transition-colors`}>About Us</Link></li>
                             <li><Link href="#" className={`hover:${activeStyle.accent} transition-colors`}>Careers</Link></li>
                             <li><Link href="#" className={`hover:${activeStyle.accent} transition-colors`}>Press</Link></li>
-                            <li><Link href="#" className={`hover:${activeStyle.accent} transition-colors`}>Contact</Link></li>
+                            <li><Link href="/contact" className={`hover:${activeStyle.accent} transition-colors`}>Contact</Link></li>
+                            <li><Link href="/legal/terms" className={`hover:${activeStyle.accent} transition-colors`}>Terms & Conditions</Link></li>
+                            <li><Link href="/legal/privacy" className={`hover:${activeStyle.accent} transition-colors`}>Privacy Policy</Link></li>
                         </ul>
                     </div>
                     <div>

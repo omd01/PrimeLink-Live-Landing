@@ -29,7 +29,7 @@ const features = [
 
 export default function Excellence() {
     return (
-        <section className="py-24 md:py-32 bg-[#022C22] relative overflow-hidden">
+        <section className="py-16 md:py-32 bg-[#022C22] relative overflow-hidden">
             {/* Background noise/texture similar to other sections */}
             <div className="absolute inset-0 opacity-5 pointer-events-none"
                 style={{ backgroundImage: 'radial-gradient(#F59E0B 1px, transparent 1px)', backgroundSize: '30px 30px' }}>
@@ -38,7 +38,7 @@ export default function Excellence() {
             <div className="max-w-7xl mx-auto px-6 relative z-10">
 
                 {/* Features Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-32">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-16 md:mb-32">
                     {features.map((feature, i) => (
                         <motion.div
                             key={i}
@@ -58,16 +58,16 @@ export default function Excellence() {
                 </div>
 
                 {/* Main Content Split */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16 items-center">
 
                     {/* Visual Composite */}
-                    <div className="relative">
+                    <div className="relative mb-8 lg:mb-0">
                         <motion.div
                             initial={{ opacity: 0, x: -50 }}
                             whileInView={{ opacity: 1, x: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.8 }}
-                            className="relative h-[400px] md:h-[500px] w-full rounded-[2.5rem] overflow-hidden border border-white/10"
+                            className="relative h-[300px] md:h-[500px] w-full rounded-[2.5rem] overflow-hidden border border-white/10"
                         >
                             <Image
                                 src="/images/physical/moringa.jpeg"
@@ -84,7 +84,7 @@ export default function Excellence() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: 0.3, duration: 0.8 }}
-                            className="absolute -bottom-12 -right-4 md:right-8 w-48 md:w-64 aspect-[3/4] rounded-2xl overflow-hidden border-4 border-[#022C22] shadow-2xl"
+                            className="absolute -bottom-6 right-0 md:-bottom-12 md:right-8 w-40 md:w-64 aspect-[3/4] rounded-2xl overflow-hidden border-4 border-[#022C22] shadow-2xl"
                         >
                             <div className="relative w-full h-full bg-white">
                                 <Image

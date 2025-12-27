@@ -86,7 +86,7 @@ const Hero = () => {
                         </span>
                     </div>
 
-                    <h1 className={`text-7xl md:text-9xl font-bold text-white uppercase leading-[0.85] tracking-tight mb-8 ${FONT.header}`}>
+                    <h1 className={`text-5xl md:text-9xl font-bold text-white uppercase leading-[0.85] tracking-tight mb-8 ${FONT.header}`}>
                         Primelink<br />
                         <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/40">Trade</span>
                     </h1>
@@ -254,8 +254,9 @@ export default function PhysicalTradePage() {
         <main className="min-h-screen bg-[#022C22] text-white selection:bg-[#F59E0B] selection:text-[#022C22]">
             <Navbar />
             <Hero />
-            <Excellence />
             <BentoGrid />
+            <Excellence />
+            {/* <OurStory /> */}
             <WhyUs />
             <Certifications />
             <Footer theme="physical" />
