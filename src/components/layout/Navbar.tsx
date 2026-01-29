@@ -19,7 +19,7 @@ const NAV_ITEMS = [
 export default function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const pathname = usePathname();
-    const isPhysical = pathname === '/physical';
+    const isPhysical = pathname?.startsWith('/physical');
     const isDigital = pathname === '/digital';
 
     // Prevent scrolling when menu is open

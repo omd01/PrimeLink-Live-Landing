@@ -1,0 +1,277 @@
+"use client";
+
+import Image from "next/image";
+import { motion } from "framer-motion";
+import {
+    ShieldCheck,
+    Leaf,
+    Sprout,
+    CheckCircle2,
+    Cookie,
+    Sparkles,
+    CupSoda,
+    Activity,
+    ChefHat,
+    Factory
+} from "lucide-react";
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
+
+const FONT = {
+    header: "font-rajdhani",
+    body: "font-outfit",
+};
+
+const ProductSpecsTable = () => {
+    return (
+        <div className="w-full">
+            <h3 className={`text-2xl font-bold uppercase ${FONT.header} mb-4 text-white border-l-4 border-[#F59E0B] pl-4`}>
+                Product Specifications
+            </h3>
+            <div className="border border-white/20 rounded-2xl overflow-hidden overflow-x-auto">
+                <table className="w-full text-left border-collapse min-w-[600px]">
+                    <thead className="bg-white/5 text-[#F59E0B]">
+                        <tr>
+                            <th className={`p-4 font-bold uppercase ${FONT.header} border-b border-r border-white/10`}>Specification</th>
+                            <th className={`p-4 font-bold uppercase ${FONT.header} border-b border-r border-white/10`}>Fresh</th>
+                            <th className={`p-4 font-bold uppercase ${FONT.header} border-b border-r border-white/10`}>Frozen (IQF)</th>
+                            <th className={`p-4 font-bold uppercase ${FONT.header} border-b border-white/10`}>Dehydrated (Powder)</th>
+                        </tr>
+                    </thead>
+                    <tbody className={`${FONT.body} text-white/80`}>
+                        {[
+                            {
+                                spec: "Type",
+                                fresh: "Pusa Naubahar / Green Tender",
+                                frozen: "IQF Cuts (Blanched)",
+                                dehydrated: "Air-Dried Green Powder"
+                            },
+                            {
+                                spec: "Grade & Quality",
+                                fresh: "A Grade, Tender, Non-Fibrous",
+                                frozen: "A Grade, Uniform Cut",
+                                dehydrated: "Premium Superfood Grade"
+                            },
+                            {
+                                spec: "Shelf Life",
+                                fresh: "3-4 days (Refrigerated)",
+                                frozen: "12-18 months (-18°C)",
+                                dehydrated: "12-24 months (Cool Dry Place)"
+                            },
+                            {
+                                spec: "Packaging",
+                                fresh: "10kg Mesh Bags / Crates",
+                                frozen: "LDPE Polybags (500g)",
+                                dehydrated: "Foil Pouches / HDPE Drums"
+                            }
+                        ].map((row, i) => (
+                            <tr key={i} className="border-b border-white/10 last:border-b-0 hover:bg-white/5 transition-colors">
+                                <td className="p-4 font-bold text-white border-r border-white/10">{row.spec}</td>
+                                <td className="p-4 border-r border-white/10">{row.fresh}</td>
+                                <td className="p-4 border-r border-white/10">{row.frozen}</td>
+                                <td className="p-4">{row.dehydrated}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    );
+};
+
+const ProductDetails = () => {
+    return (
+        <section className="py-24 px-6 max-w-7xl mx-auto space-y-24">
+
+            {/* 1. TRUST & CERTIFICATIONS */}
+            <div className="border-y border-white/10 py-12">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+                    {[
+                        { label: "FSSAI Approved", icon: ShieldCheck },
+                        { label: "USDA Organic", icon: Leaf },
+                        { label: "Non-GMO Project", icon: CheckCircle2 },
+                        { label: "100% Vegan", icon: Sprout },
+                    ].map((item, i) => (
+                        <div key={i} className="flex flex-col items-center justify-center gap-3 text-center group">
+                            <div className="p-4 rounded-full bg-white/5 border border-white/10 group-hover:bg-[#F59E0B]/20 group-hover:border-[#F59E0B] transition-colors">
+                                <item.icon className="w-6 h-6 text-[#F59E0B]" />
+                            </div>
+                            <span className={`text-sm font-bold uppercase tracking-wider ${FONT.header} text-white/80`}>
+                                {item.label}
+                            </span>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+
+                {/* 2. NUTRITION FACTS TABLE */}
+                <div>
+                    <h3 className={`text-3xl font-bold uppercase ${FONT.header} mb-8 text-white`}>
+                        Nutrition Profile <span className="text-[#F59E0B] text-lg align-middle ml-2">(Per 100g)</span>
+                    </h3>
+                    <div className="border border-white/20 rounded-2xl overflow-hidden">
+                        <table className="w-full text-left border-collapse">
+                            <tbody className={`${FONT.body} text-white/80`}>
+                                {[
+                                    { label: "Energy", value: "32 Kcal" },
+                                    { label: "Dietary Fiber", value: "7.9 g" },
+                                    { label: "Protein", value: "3.2 g" },
+                                    { label: "Vitamin C", value: "16% DV" },
+                                    { label: "Iron", value: "6% DV" },
+                                ].map((row, i) => (
+                                    <tr key={i} className="border-b border-white/10 last:border-b-0 hover:bg-white/5 transition-colors">
+                                        <td className="p-4 font-medium border-r border-white/10">{row.label}</td>
+                                        <td className="p-4 font-bold text-white text-right">{row.value}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                {/* 3. USAGE SECTION */}
+                <div>
+                    <h3 className={`text-3xl font-bold uppercase ${FONT.header} mb-8 text-white`}>
+                        Versatile Usage
+                    </h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        {[
+                            { title: "Culinary", icon: ChefHat, desc: "Traditional vegetable curries" },
+                            { title: "Industrial", icon: Factory, desc: "Guar Gum extraction" },
+                            { title: "Health", icon: Activity, desc: "Blood sugar support" },
+                        ].map((card, i) => (
+                            <div
+                                key={i}
+                                className="bg-white/5 border border-white/10 rounded-2xl p-6 flex flex-col items-center text-center hover:scale-105 transition-transform duration-300 hover:bg-white/10"
+                            >
+                                <card.icon className="w-8 h-8 text-[#F59E0B] mb-4" />
+                                <h4 className={`text-lg font-bold uppercase ${FONT.header} mb-1`}>{card.title}</h4>
+                                <p className="text-xs text-white/60">{card.desc}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
+            {/* 4. TECHNICAL SPECIFICATIONS (HSN CODES) */}
+            <div className="w-full">
+                <h3 className={`text-2xl font-bold uppercase ${FONT.header} mb-4 text-white border-l-4 border-[#F59E0B] pl-4`}>
+                    HSN Codes
+                </h3>
+                <div className="border border-white/20 rounded-2xl overflow-hidden overflow-x-auto">
+                    <table className="w-full text-left border-collapse min-w-[600px]">
+                        <thead className="bg-white/5 text-[#F59E0B]">
+                            <tr>
+                                <th className={`p-4 font-bold uppercase ${FONT.header} border-b border-r border-white/10`}>Product Form</th>
+                                <th className={`p-4 font-bold uppercase ${FONT.header} border-b border-white/10`}>HSN Code</th>
+                            </tr>
+                        </thead>
+                        <tbody className={`${FONT.body} text-white/80`}>
+                            {[
+                                { form: "Gawar Powder (Dehydrated)", hsn: "0712 90 90" },
+                                { form: "Fresh Cluster Beans", hsn: "0709 99 90" },
+                                { form: "Frozen Gawar (IQF)", hsn: "0710 80 90" },
+                            ].map((row, i) => (
+                                <tr key={i} className="border-b border-white/10 last:border-b-0 hover:bg-white/5 transition-colors">
+                                    <td className="p-4 font-bold text-white border-r border-white/10">{row.form}</td>
+                                    <td className="p-4">{row.hsn}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+    );
+};
+
+export default function GawarPage() {
+    return (
+        <main className="min-h-screen bg-[#022C22] text-white">
+            <Navbar />
+
+            {/* HERO SECTION */}
+            <section className="pt-32 pb-8 px-6 max-w-7xl mx-auto">
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="mb-12"
+                >
+                    <h1 className={`text-5xl md:text-7xl font-bold uppercase ${FONT.header} mb-4`}>
+                        Gawar Powder
+                    </h1>
+                    <div className="h-1 w-24 bg-[#F59E0B]" />
+                </motion.div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+
+                    {/* Left Column: Image */}
+                    <div className="space-y-8 w-full">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.8 }}
+                            className="relative aspect-video w-full rounded-3xl overflow-hidden border border-white/20"
+                        >
+                            <Image
+                                src="/images/physical/gawar.png"
+                                alt="Organic Gawar Powder"
+                                fill
+                                className="object-cover"
+                            />
+                        </motion.div>
+                    </div>
+
+                    {/* Right Column (or below on mobile): Description */}
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.4, duration: 0.8 }}
+                        className="space-y-8"
+                    >
+                        <div className="prose prose-lg prose-invert">
+                            <h3 className={`text-3xl text-[#F59E0B] font-bold uppercase ${FONT.header} mb-4`}>
+                                Industrial & Food Grade
+                            </h3>
+                            <p className={`text-white/80 ${FONT.body} leading-relaxed text-lg`}>
+                                Our premium Gawar (Cluster Bean) Powder is processed from high-quality beans sourced from Rajasthan. It serves as a vital ingredient in both culinary applications and industrial processes, known for its high viscosity and thickening properties.
+                            </p>
+                            <p className={`text-white/80 ${FONT.body} leading-relaxed text-lg mt-4`}>
+                                Rich in dietary fiber and essential nutrients, Gawar powder is excellent for digestive health and blood sugar management.
+                            </p>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4 border-t border-white/10 pt-8">
+                            <div>
+                                <span className="block text-xs text-[#F59E0B] uppercase tracking-widest mb-1">Origin</span>
+                                <span className={`text-xl font-bold ${FONT.header}`}>Rajasthan, India</span>
+                            </div>
+                            <div>
+                                <span className="block text-xs text-[#F59E0B] uppercase tracking-widest mb-1">Grade</span>
+                                <span className={`text-xl font-bold ${FONT.header}`}>Premium A+</span>
+                            </div>
+                        </div>
+                    </motion.div>
+                </div>
+
+                {/* Inserted Specification Table (Full Width) */}
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.2, duration: 0.8 }}
+                    className="mt-12"
+                >
+                    <ProductSpecsTable />
+                </motion.div>
+            </section>
+
+            {/* NEW PRODUCT DETAILS SECTION */}
+            <ProductDetails />
+
+            <Footer theme="physical" />
+        </main>
+    );
+}
