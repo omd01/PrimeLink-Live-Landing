@@ -256,8 +256,6 @@ export default function PhysicalTradePage() {
             <Hero />
             <Excellence />
             <BentoGrid />
-
-            {/* <OurStory /> */}
             <WhyUs />
             <Certifications />
             <Footer theme="physical" />

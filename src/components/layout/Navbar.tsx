@@ -12,7 +12,7 @@ const NAV_ITEMS = [
         label: "Physical Trade",
         href: "/physical",
     },
-    { label: "Digital Tools", href: "#" },
+    { label: "Digital Tools", href: "/digital" },
     { label: "About", href: "#" }
 ];
 
@@ -20,6 +20,7 @@ export default function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const pathname = usePathname();
     const isPhysical = pathname === '/physical';
+    const isDigital = pathname === '/digital';
 
     // Prevent scrolling when menu is open
     useEffect(() => {
@@ -37,17 +38,18 @@ export default function Navbar() {
 
     const textColorClass = isPhysical ? 'text-white' : 'text-neutral-900';
     const navItemColorClass = isPhysical ? 'text-white/80' : 'text-neutral-600';
+    const borderColorClass = isPhysical ? 'border-white/30' : isDigital ? 'border-neutral-200' : 'border-white/20';
 
     return (
         <>
             {/* Main Floating Pill Navbar */}
-            <nav className={`fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-6xl bg-white/10 backdrop-blur-md border ${isPhysical ? 'border-white/30' : 'border-white/20'} rounded-full shadow-lg transition-all duration-300 overflow-visible`}>
+            <nav className={`fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-6xl bg-white/10 backdrop-blur-md border ${borderColorClass} rounded-full shadow-lg transition-all duration-300 overflow-visible`}>
                 <div className="h-14 md:h-16 px-6 flex items-center justify-between">
 
                     <a href="/"><div className="flex items-center gap-3">
                         {/* Logo P */}
                         <div className="w-8 h-8 rounded-lg flex items-center justify-center text-black font-bold text-lg">
-                            <Image src="/EXIM.svg" alt="Logo" width={32} height={32} />
+                            <Image src={isDigital ? "/DIGITAL.svg" : "/EXIM.svg"} alt="PrimeLink Logo" width={32} height={32} />
                         </div>
                         <span className={`font-semibold text-lg tracking-tight transition-colors ${textColorClass}`}>PrimeLink Exim</span>
                     </div>

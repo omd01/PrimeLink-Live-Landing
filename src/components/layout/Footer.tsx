@@ -4,7 +4,7 @@ import { Icon } from '@iconify/react';
 import Link from 'next/link';
 
 interface FooterProps {
-    theme?: 'default' | 'physical';
+    theme?: 'default' | 'physical' | 'digital';
 }
 
 export default function Footer({ theme = 'default' }: FooterProps) {
@@ -26,6 +26,14 @@ export default function Footer({ theme = 'default' }: FooterProps) {
             button: 'bg-[#F59E0B] text-[#022C22] hover:bg-white hover:text-[#022C22] shadow-[0_0_20px_-5px_#F59E0B]',
             dot: 'bg-[#F59E0B]',
             decoration: 'bg-gradient-to-r from-transparent via-[#F59E0B]/50 to-transparent'
+        },
+        digital: {
+            bg: 'bg-white',
+            text: 'text-neutral-900',
+            accent: 'text-brand-teal',
+            button: 'bg-brand-teal text-white hover:bg-brand-cyan hover:shadow-lg hover:shadow-brand-cyan/20',
+            dot: 'bg-brand-teal',
+            decoration: 'bg-gradient-to-r from-transparent via-brand-teal/20 to-transparent'
         }
     };
 
@@ -67,7 +75,7 @@ export default function Footer({ theme = 'default' }: FooterProps) {
                         <h4 className="text-sm font-mono text-neutral-500 uppercase tracking-widest mb-6">Platform</h4>
                         <ul className="space-y-4 text-lg text-neutral-300 font-light">
                             <li><Link href="#" className={`hover:${activeStyle.accent} transition-colors`}>Physical Trade</Link></li>
-                            <li><Link href="#" className={`hover:${activeStyle.accent} transition-colors`}>Digital Tools</Link></li>
+                            <li><Link href="/digital" className={`hover:${activeStyle.accent} transition-colors`}>Digital Tools</Link></li>
                             <li><Link href="#" className={`hover:${activeStyle.accent} transition-colors`}>Logistics Network</Link></li>
                             <li><Link href="#" className={`hover:${activeStyle.accent} transition-colors`}>Pricing</Link></li>
                         </ul>

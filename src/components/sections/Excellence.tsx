@@ -38,7 +38,8 @@ export default function Excellence() {
             <div className="max-w-7xl mx-auto px-6 relative z-10">
 
                 {/* Features Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-16 md:mb-32">
+                {/* Features Grid: Industrial Spec Sheet Style */}
+                <div className="grid grid-cols-1 md:grid-cols-4 mb-32 border-y border-white/10">
                     {features.map((feature, i) => (
                         <motion.div
                             key={i}
@@ -46,13 +47,36 @@ export default function Excellence() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: i * 0.1 }}
-                            className="bg-[#033a2d]/30 backdrop-blur-sm border border-white/5 p-8 rounded-3xl hover:border-white/10 transition-colors group"
+                            className={`
+                                relative p-8 group transition-colors hover:bg-white/5
+                                border-b md:border-b-0 border-white/10 md:border-r last:border-r-0
+                            `}
                         >
-                            <div className="w-12 h-12 bg-[#022C22] rounded-full flex items-center justify-center border border-[#F59E0B]/30 mb-6 group-hover:scale-110 transition-transform text-[#F59E0B]">
-                                <feature.icon size={24} />
+                            {/* Tech Header */}
+                            <div className="flex justify-between items-start mb-12 opacity-50 group-hover:opacity-100 transition-opacity">
+                                <span className="font-mono text-xs text-[#F59E0B] tracking-widest">
+                                    0{i + 1}
+                                </span>
+                                <feature.icon size={16} className="text-[#F59E0B]" />
                             </div>
-                            <h3 className="text-white font-rajdhani font-bold text-lg uppercase mb-2">{feature.title}</h3>
-                            <p className="text-white/60 font-outfit text-sm">{feature.desc}</p>
+
+                            {/* Main Title */}
+                            <h3 className="text-3xl font-rajdhani font-bold text-white uppercase leading-[0.9] mb-4 group-hover:text-[#F59E0B] transition-colors">
+                                {feature.title.split(" ").map((word, w) => (
+                                    <span key={w} className="block">{word}</span>
+                                ))}
+                            </h3>
+
+                            {/* Desc */}
+                            <div className="h-[1px] w-8 bg-white/20 mb-4 group-hover:w-full group-hover:bg-[#F59E0B]/50 transition-all duration-500" />
+                            <p className="text-white/60 font-outfit text-sm leading-relaxed max-w-[20ch]">
+                                {feature.desc}
+                            </p>
+
+                            {/* Corner Accents */}
+                            <div className="absolute top-0 right-0 p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <div className="w-2 h-2 border-t border-r border-[#F59E0B]" />
+                            </div>
                         </motion.div>
                     ))}
                 </div>

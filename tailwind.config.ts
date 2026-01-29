@@ -17,7 +17,8 @@ const config: Config = {
           amber: '#D97706',  /* Darker Amber for Light Mode */
           dark: '#ffffff',   /* Background -> White */
           card: '#F9FAFB',   /* Surface -> Neutral 50 */
-          green: '#052E16'   /* Deep Brand Green (Keep for accents) */
+          green: '#052E16',   /* Deep Brand Green (Keep for accents) */
+          cyan: '#06B6D4'    /* Data Cyan */
         }
       },
       spacing: {
