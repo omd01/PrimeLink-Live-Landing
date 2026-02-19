@@ -13,7 +13,7 @@ const NAV_ITEMS = [
         href: "/physical",
     },
     { label: "Digital Tools", href: "/digital" },
-    { label: "About", href: "#" }
+    { label: "About", href: "/about" }
 ];
 
 export default function Navbar() {

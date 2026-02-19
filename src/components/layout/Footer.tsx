@@ -83,7 +83,7 @@ export default function Footer({ theme = 'default' }: FooterProps) {
                     <div>
                         <h4 className="text-sm font-mono text-neutral-500 uppercase tracking-widest mb-6">Company</h4>
                         <ul className="space-y-4 text-lg text-neutral-300 font-light">
-                            <li><Link href="#" className={`hover:${activeStyle.accent} transition-colors`}>About Us</Link></li>
+                            <li><Link href="/about" className={`hover:${activeStyle.accent} transition-colors`}>About Us</Link></li>
                             <li><Link href="#" className={`hover:${activeStyle.accent} transition-colors`}>Careers</Link></li>
                             <li><Link href="#" className={`hover:${activeStyle.accent} transition-colors`}>Press</Link></li>
                             <li><Link href="/contact" className={`hover:${activeStyle.accent} transition-colors`}>Contact</Link></li>
