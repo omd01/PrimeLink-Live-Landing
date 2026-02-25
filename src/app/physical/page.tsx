@@ -134,10 +134,12 @@ const Hero = () => {
 
 const BentoGrid = () => {
     const items = [
-        { title: "Beetroot Powder", subtitle: "Organic Beetroot Powder", img: "/images/physical/beetroot.jpeg", col: "md:col-span-2", row: "md:row-span-2", link: "/physical/beetroot" },
-        { title: "Gawar Powder", subtitle: "fresh from Rajasthan", img: "/images/physical/gawar.png", col: "md:col-span-1", row: "md:row-span-1", link: "/physical/gawar" },
-        { title: "Moringa", subtitle: "Organic Moringa Powder", img: "/images/physical/moringa.jpeg", col: "md:col-span-1", row: "md:row-span-1", link: "/physical/moringa" },
-        { title: "Turmeric Powder", subtitle: "Organic Turmeric", img: "/images/physical/termaric.png", col: "md:col-span-2", row: "md:row-span-1", link: "/physical/turmeric" },
+
+        { title: "Beetroot Powder", subtitle: "Organic Beetroot Powder", img: "/images/physical/beetroot.jpeg", col: "md:col-span-2", row: "md:row-span-2" },
+        { title: "Cluster Bean Powder", subtitle: "fresh from Rajasthan", img: "/images/physical/gawar.png", col: "md:col-span-1", row: "md:row-span-1" },
+        { title: "Moringa Powder", subtitle: "Organic Moringa Powder", img: "/images/physical/moringa.jpeg", col: "md:col-span-1", row: "md:row-span-1" },
+        { title: "Turmeric Powder", subtitle: "Organic Turmeric", img: "/images/physical/termaric.png", col: "md:col-span-2", row: "md:row-span-1" },
+
     ];
 
     return (
