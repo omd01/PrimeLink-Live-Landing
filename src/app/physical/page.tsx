@@ -133,7 +133,7 @@ const Hero = () => {
 };
 
 const BentoGrid = () => {
-    const items = [
+    const items: { title: string; subtitle: string; img: string; col: string; row: string; link?: string }[] = [
 
         { title: "Beetroot Powder", subtitle: "Organic Beetroot Powder", img: "/images/physical/beetroot.jpeg", col: "md:col-span-2", row: "md:row-span-2" },
         { title: "Cluster Bean Powder", subtitle: "fresh from Rajasthan", img: "/images/physical/gawar.png", col: "md:col-span-1", row: "md:row-span-1" },
