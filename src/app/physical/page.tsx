@@ -135,10 +135,10 @@ const Hero = () => {
 const BentoGrid = () => {
     const items = [
 
-        { title: "Beetroot Powder", subtitle: "Organic Beetroot Powder", img: "/images/physical/beetroot.jpeg", col: "md:col-span-2", row: "md:row-span-2" },
-        { title: "Cluster Bean Powder", subtitle: "fresh from Rajasthan", img: "/images/physical/gawar.png", col: "md:col-span-1", row: "md:row-span-1" },
-        { title: "Moringa Powder", subtitle: "Organic Moringa Powder", img: "/images/physical/moringa.jpeg", col: "md:col-span-1", row: "md:row-span-1" },
-        { title: "Turmeric Powder", subtitle: "Organic Turmeric", img: "/images/physical/termaric.png", col: "md:col-span-2", row: "md:row-span-1" },
+        { title: "Beetroot Powder", subtitle: "Organic Beetroot Powder", img: "/images/physical/beetroot.jpeg", col: "md:col-span-2", row: "md:row-span-2", link: "/physical/beetroot" },
+        { title: "Cluster Bean Powder", subtitle: "fresh from Rajasthan", img: "/images/physical/gawar.png", col: "md:col-span-1", row: "md:row-span-1", link: "/physical/gawar" },
+        { title: "Moringa Powder", subtitle: "Organic Moringa Powder", img: "/images/physical/moringa.jpeg", col: "md:col-span-1", row: "md:row-span-1", link: "/physical/moringa" },
+        { title: "Turmeric Powder", subtitle: "Organic Turmeric", img: "/images/physical/termaric.png", col: "md:col-span-2", row: "md:row-span-1", link: "/physical/turmeric" },
 
     ];
 
@@ -163,6 +163,11 @@ const BentoGrid = () => {
                             transition={{ delay: i * 0.1 }}
                             whileHover="hover"
                         >
+                            {item.link && (
+                                <Link href={item.link} className="absolute inset-0 z-20">
+                                    <span className="sr-only">View {item.title}</span>
+                                </Link>
+                            )}
                             <motion.div
                                 className="absolute inset-0 z-0"
                                 variants={{ hover: { scale: 1.05 } }}
@@ -177,30 +182,18 @@ const BentoGrid = () => {
                                 <div className="absolute inset-0 bg-gradient-to-t from-[#022C22] via-transparent to-transparent" />
                             </motion.div>
 
-                            <div className="absolute bottom-0 left-0 p-8 w-full z-10 flex items-end justify-between">
+                            <div className="absolute bottom-0 left-0 p-8 w-full z-10 flex items-end justify-between pointer-events-none">
                                 <div>
                                     <h3 className={`text-3xl text-white font-bold uppercase ${FONT.header}`}>{item.title}</h3>
                                     <p className="text-white/60 text-sm mt-1">{item.subtitle}</p>
                                 </div>
-                                {item.link ? (
-                                    <Link href={item.link}>
-                                        <motion.button
-                                            variants={{ hover: { y: 0, opacity: 1 } }}
-                                            initial={{ y: 20, opacity: 0 }}
-                                            className="w-10 h-10 rounded-full bg-[#F59E0B] flex items-center justify-center text-[#022C22]"
-                                        >
-                                            <ArrowUpRight size={20} />
-                                        </motion.button>
-                                    </Link>
-                                ) : (
-                                    <motion.button
-                                        variants={{ hover: { y: 0, opacity: 1 } }}
-                                        initial={{ y: 20, opacity: 0 }}
-                                        className="w-10 h-10 rounded-full bg-[#F59E0B] flex items-center justify-center text-[#022C22]"
-                                    >
-                                        <ArrowUpRight size={20} />
-                                    </motion.button>
-                                )}
+                                <motion.div
+                                    variants={{ hover: { y: 0, opacity: 1 } }}
+                                    initial={{ y: 20, opacity: 0 }}
+                                    className="w-10 h-10 rounded-full bg-[#F59E0B] flex items-center justify-center text-[#022C22]"
+                                >
+                                    <ArrowUpRight size={20} />
+                                </motion.div>
                             </div>
                         </motion.div>
                     ))}
