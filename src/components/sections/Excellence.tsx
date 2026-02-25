@@ -108,14 +108,14 @@ export default function Excellence() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: 0.3, duration: 0.8 }}
-                            className="absolute -bottom-6 right-0 md:-bottom-12 md:right-8 w-40 md:w-64 aspect-[3/4] rounded-2xl overflow-hidden border-4 border-[#022C22] shadow-2xl"
+                            className="absolute -bottom-6 right-0 md:-bottom-12 md:right-8 w-40 md:w-64 aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl border-4 border-white/40"
                         >
-                            <div className="relative w-full h-full bg-white">
+                            <div className="relative w-full h-full">
                                 <Image
                                     src="/images/physical/termaric.png"
                                     alt="Premium Product"
                                     fill
-                                    className="object-cover p-2"
+                                    className="object-cover"
                                 />
                             </div>
                         </motion.div>
@@ -159,12 +159,12 @@ export default function Excellence() {
                             ))}
                         </ul>
 
-                        <button className="group relative px-8 py-3 rounded-full border border-white/20 hover:border-[#F59E0B] transition-colors bg-[#033a2d]/30 hover:bg-[#F59E0B]/10 overflow-hidden">
+                        {/* <button className="group relative px-8 py-3 rounded-full border border-white/20 hover:border-[#F59E0B] transition-colors bg-[#033a2d]/30 hover:bg-[#F59E0B]/10 overflow-hidden">
                             <span className="relative z-10 text-white font-bold uppercase tracking-wider font-rajdhani flex items-center gap-2">
                                 Know More
                                 <span className="group-hover:translate-x-1 transition-transform">→</span>
                             </span>
-                        </button>
+                        </button> */}
                     </motion.div>
                 </div>
             </div>

@@ -98,10 +98,12 @@ const Hero = () => {
                                 type="tel"
                                 placeholder="Enter Phone Number..."
                                 className={`bg-transparent border-none text-white placeholder-white/40 focus:outline-none px-4 py-3 w-full font-outfit text-lg tracking-wide`}
+                                suppressHydrationWarning
                             />
                             <button
                                 type="submit"
                                 className={`bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-full px-8 py-3.5 font-bold uppercase text-sm tracking-wider shadow-lg hover:bg-white/20 hover:shadow-white/10 transition-all duration-300 hover:scale-105 active:scale-95 whitespace-nowrap flex items-center gap-2 ${FONT.header}`}
+                                suppressHydrationWarning
                             >
                                 <Icon icon="ic:baseline-whatsapp" className="text-xl" />
                                 {/* <span className="hidden sm:inline">WhatsApp Us</span> */}
@@ -132,10 +134,12 @@ const Hero = () => {
 
 const BentoGrid = () => {
     const items = [
+
         { title: "Beetroot Powder", subtitle: "Organic Beetroot Powder", img: "/images/physical/beetroot.jpeg", col: "md:col-span-2", row: "md:row-span-2" },
         { title: "Cluster Bean Powder", subtitle: "fresh from Rajasthan", img: "/images/physical/gawar.png", col: "md:col-span-1", row: "md:row-span-1" },
         { title: "Moringa Powder", subtitle: "Organic Moringa Powder", img: "/images/physical/moringa.jpeg", col: "md:col-span-1", row: "md:row-span-1" },
         { title: "Turmeric Powder", subtitle: "Organic Turmeric", img: "/images/physical/termaric.png", col: "md:col-span-2", row: "md:row-span-1" },
+
     ];
 
     return (
@@ -178,13 +182,25 @@ const BentoGrid = () => {
                                     <h3 className={`text-3xl text-white font-bold uppercase ${FONT.header}`}>{item.title}</h3>
                                     <p className="text-white/60 text-sm mt-1">{item.subtitle}</p>
                                 </div>
-                                <motion.button
-                                    variants={{ hover: { y: 0, opacity: 1 } }}
-                                    initial={{ y: 20, opacity: 0 }}
-                                    className="w-10 h-10 rounded-full bg-[#F59E0B] flex items-center justify-center text-[#022C22]"
-                                >
-                                    <ArrowUpRight size={20} />
-                                </motion.button>
+                                {item.link ? (
+                                    <Link href={item.link}>
+                                        <motion.button
+                                            variants={{ hover: { y: 0, opacity: 1 } }}
+                                            initial={{ y: 20, opacity: 0 }}
+                                            className="w-10 h-10 rounded-full bg-[#F59E0B] flex items-center justify-center text-[#022C22]"
+                                        >
+                                            <ArrowUpRight size={20} />
+                                        </motion.button>
+                                    </Link>
+                                ) : (
+                                    <motion.button
+                                        variants={{ hover: { y: 0, opacity: 1 } }}
+                                        initial={{ y: 20, opacity: 0 }}
+                                        className="w-10 h-10 rounded-full bg-[#F59E0B] flex items-center justify-center text-[#022C22]"
+                                    >
+                                        <ArrowUpRight size={20} />
+                                    </motion.button>
+                                )}
                             </div>
                         </motion.div>
                     ))}

@@ -13,13 +13,13 @@ const NAV_ITEMS = [
         href: "/physical",
     },
     { label: "Digital Tools", href: "/digital" },
-    { label: "About", href: "#" }
+    { label: "About", href: "/about" }
 ];
 
 export default function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const pathname = usePathname();
-    const isPhysical = pathname === '/physical';
+    const isPhysical = pathname?.startsWith('/physical');
     const isDigital = pathname === '/digital';
 
     // Prevent scrolling when menu is open
